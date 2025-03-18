@@ -1,2 +1,2 @@
 # webdev-project
- Project for web development course
+ Project for our web development course
