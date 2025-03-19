@@ -4,5 +4,15 @@
 Dylan:
 
 Amir:
+2025/03/18 Amir
+1. Done since last scrum
+- 
+2. Plan until next Scrum
+- install Laravel
+- create an Azure database (and set up connection in Laravel)
+- create tables (custom migrations)
+- updated the proposal
+3. Figure things out
+-
 
 Haitao:
