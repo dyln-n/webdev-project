@@ -4,7 +4,7 @@
 Dylan:
 
 2. Plan until next Scrum
-- work on login/register page
+- setup laravel
 3. Figure things out
 - watch laravel and related tutorials
 
@@ -15,6 +15,25 @@ Amir:
 - create an Azure database (and set up connection in Laravel)
 - create tables (custom migrations)
 - updated the proposal
+3. Figure things out
+-
+
+Haitao:
+
+2025-03-19
+----------
+
+Dylan:
+
+2. Plan until next Scrum
+- work on login/register page
+3. Figure things out
+- look into laravel passport
+
+Amir:
+
+2. Plan until next Scrum
+- 
 3. Figure things out
 -
 
