@@ -20,8 +20,8 @@
         <div class="mt-4">
             <label for="role">Role</label>
             <select id="role" name="role" class="block mt-1 w-full">
-                <option value="buyer">Buyer</option>
-                <option value="seller">Seller</option>
+                <option value="buyer" {{ old('role') == 'buyer' ? 'selected' : '' }}>Buyer</option>
+                <option value="seller" {{ old('role') == 'seller' ? 'selected' : '' }}>Seller</option>
             </select>
         </div>
 
