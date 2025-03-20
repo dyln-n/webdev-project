@@ -45,6 +45,11 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+         // Redirect based on the user's role
+         if ($user->role == 'seller') {
+            return redirect()->route('seller.dashboard');  // Redirect to seller dashboard
+        } else {
+            return redirect()->route('buyer.dashboard');  // Redirect to buyer dashboard
+        }
     }
 }
