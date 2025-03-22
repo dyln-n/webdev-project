@@ -2,29 +2,24 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\BuyerController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware(['auth'])->group(function () {
-    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 
-    Route::get('/seller-dashboard', [DashboardController::class, 'sellerDashboard'])->name('seller.dashboard');
-    Route::get('/buyer-dashboard', [DashboardController::class, 'buyerDashboard'])->name('buyer.dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard/seller', [DashboardController::class, 'sellerDashboard'])->name('dashboard.seller');
 
-
-    Route::get('/seller/dashboard', [SellerController::class, 'dashboard']);
     Route::get('/seller/products', [SellerController::class, 'index'])->name('seller.products');
     Route::post('/seller/products', [SellerController::class, 'store'])->name('seller.products.store');
     Route::put('/seller/products/{id}', [SellerController::class, 'update'])->name('seller.products.update');
@@ -32,5 +27,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard/buyer', [BuyerController::class, 'dashboard'])->name('dashboard.buyer');
+
+    Route::get('/buyer/orders', [BuyerController::class, 'orders'])->name('buyer.orders');
+    Route::get('/buyer/orders/{id}', [BuyerController::class, 'orderDetails'])->name('buyer.orders.details');
+    Route::post('/buyer/orders/{id}/rate', [BuyerController::class, 'rateOrder'])->name('buyer.orders.rate');
+});
 
 require __DIR__ . '/auth.php';

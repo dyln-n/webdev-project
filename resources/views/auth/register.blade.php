@@ -17,13 +17,17 @@
         </div>
 
         <!-- Role -->
-        <div class="mt-4">
-            <label for="role">Role</label>
-            <select id="role" name="role" class="block mt-1 w-full">
-                <option value="buyer" {{ old('role') == 'buyer' ? 'selected' : '' }}>Buyer</option>
-                <option value="seller" {{ old('role') == 'seller' ? 'selected' : '' }}>Seller</option>
-            </select>
-        </div>
+<!-- Role -->
+<div class="mt-4">
+    <x-input-label for="role" :value="__('Role')" />
+    <select id="role" name="role"
+        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 w-full">
+        <option value="buyer" {{ old('role') == 'buyer' ? 'selected' : '' }}>Buyer</option>
+        <option value="seller" {{ old('role') == 'seller' ? 'selected' : '' }}>Seller</option>
+    </select>
+    <x-input-error :messages="$errors->get('role')" class="mt-2" />
+</div>
+
 
         <!-- Password -->
         <div class="mt-4">

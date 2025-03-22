@@ -31,7 +31,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'in:buyer,seller'],  // Ensure role is either 'buyer' or 'seller'
         ]);
@@ -47,11 +47,11 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-         // Redirect based on the user's role
-         if ($user->role == 'seller') {
-            return redirect()->route('seller.dashboard');  // Redirect to seller dashboard
+        // Redirect based on the user's role
+        if ($user->role == 'seller') {
+            return redirect()->route('dashboard.seller');  // Redirect to seller dashboard
         } else {
-            return redirect()->route('buyer.dashboard');  // Redirect to buyer dashboard
+            return redirect()->route('dashboard.buyer');  // Redirect to buyer dashboard
         }
     }
 }

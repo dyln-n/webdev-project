@@ -33,11 +33,12 @@ class AuthenticatedSessionController extends Controller
         // Get the authenticated user
         $user = Auth::user();
 
-        // Redirect based on the user's role
-        if ($user->role == 'seller') {
-            return redirect()->route('seller.dashboard');  // Redirect to seller's dashboard
+        if ($user->role === 'seller') {
+            return redirect()->route('dashboard.seller');
+        } elseif ($user->role === 'buyer') {
+            return redirect()->route('dashboard.buyer');
         } else {
-            return redirect()->route('buyer.dashboard');  // Redirect to buyer's dashboard
+            return redirect('/'); // fallback
         }
     }
 
