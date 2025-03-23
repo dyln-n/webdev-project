@@ -9,21 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SellerController extends Controller
 {
-    // seller dashboard
-    public function dashboard()
-    {
-        return view('dashboard.seller');
-    }
-
-    // seller products list
-    public function index()
-    {
-        $products = Product::where('seller_id', Auth::id())->get();
-        $categories = Category::all();
-        return view('seller.products', compact('products', 'categories'));
-    }
-
-    // add a new product
+    // Add a new product
     public function store(Request $request)
     {
         $request->validate([
@@ -43,13 +29,13 @@ class SellerController extends Controller
             'seller_id' => Auth::id(),
         ]);
 
-        return redirect()->route('seller.products')->with('success', 'Product added successfully!');
+        return redirect()->route('dashboard.seller')->with('success', 'Product added successfully!');
     }
 
-    // update a product
+    // Update a product
     public function update(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::where('seller_id', Auth::id())->findOrFail($id);
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -63,19 +49,23 @@ class SellerController extends Controller
             'stock' => $request->stock
         ]);
 
+        // ✅ Explicitly return status code 200 to fix JS fetch issue
         return response()->json([
             'success' => true,
             'message' => 'Product updated successfully!',
             'product' => $product
-        ]);
+        ], 200);
     }
 
-    // delete a product
+    // Delete a product
     public function destroy($id)
     {
         $product = Product::where('seller_id', Auth::id())->findOrFail($id);
         $product->delete();
 
-        return redirect()->route('seller.products')->with('success', 'Product deleted successfully!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Product deleted.'
+        ]);
     }
 }

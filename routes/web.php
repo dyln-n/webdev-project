@@ -20,7 +20,6 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/seller', [DashboardController::class, 'sellerDashboard'])->name('dashboard.seller');
 
-    Route::get('/seller/products', [SellerController::class, 'index'])->name('seller.products');
     Route::post('/seller/products', [SellerController::class, 'store'])->name('seller.products.store');
     Route::put('/seller/products/{id}', [SellerController::class, 'update'])->name('seller.products.update');
     Route::delete('/seller/products/{id}', [SellerController::class, 'destroy'])->name('seller.products.destroy');

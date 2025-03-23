@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function sellerDashboard()
     {
-        return view('dashboard.seller');  // Return a view for the seller's dashboard
+        $products = Product::where('seller_id', Auth::id())->get();
+        $categories = Category::all();
+
+        return view('dashboard.seller', compact('products', 'categories'));
     }
 
     public function buyerDashboard()
