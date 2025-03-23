@@ -37,7 +37,28 @@ Amir:
 3. Figure things out
 -
 
+2025-03-20
+----------
+Dylan:
+
+Amir:
+
 Haitao:
+1. create team domain in cpanel
+2. create team database in cpanel
+3. create team FTP account 
+4. test team hosting: team domain, database, FileZilla
+
+2025-03-21
+----------
+Dylan:
+
+Amir:
+
+Haitao:
+1. create seller dashboard frontend and backend
+2. set up and test laravel in cpanel hosting
+3. test register/login/logout features
 
 2025-03-22
 ----------
@@ -55,3 +76,7 @@ not Done: - create tables
 - checkout system using Stripe
 
 Haitao:
+1. web dashboard frontend, routes
+2. buyer dashboard frontend
+3. seller dashboard frontend, controller modification and validation
+4. connect web dashboard, register/login, seller, buyer pages
