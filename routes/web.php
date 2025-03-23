@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\BuyerController;
+use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SellerController;
-use App\Http\Controllers\BuyerController;
-use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
@@ -36,3 +37,16 @@ Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items'); // AJAX route
+    Route::post('/cart', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+});
+
+
+
+    
