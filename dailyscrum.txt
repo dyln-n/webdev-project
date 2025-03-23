@@ -19,6 +19,9 @@ Amir:
 -
 
 Haitao:
+1. create proposal(web main features and urls)
+2. watch laravel tutorials
+3. set up laravel
 
 2025-03-19
 ----------
@@ -37,6 +40,11 @@ Amir:
 3. Figure things out
 -
 
+Haitao:
+1. watch laravel tutorials
+2. create sample laravel project
+
+
 2025-03-20
 ----------
 Dylan:
@@ -49,6 +57,7 @@ Haitao:
 3. create team FTP account 
 4. test team hosting: team domain, database, FileZilla
 
+
 2025-03-21
 ----------
 Dylan:
@@ -59,6 +68,7 @@ Haitao:
 1. create seller dashboard frontend and backend
 2. set up and test laravel in cpanel hosting
 3. test register/login/logout features
+
 
 2025-03-22
 ----------
