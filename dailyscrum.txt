@@ -38,3 +38,20 @@ Amir:
 -
 
 Haitao:
+
+2025-03-22
+----------
+Dylan:
+
+Amir:
+1. Done since last scrum
+- set up Laravel 
+- created Azure database 
+- updated the proposal
+not Done: - create tables
+2. Plan until next Scrum
+- implement Cart System
+3. Figure things out
+- checkout system using Stripe
+
+Haitao:
