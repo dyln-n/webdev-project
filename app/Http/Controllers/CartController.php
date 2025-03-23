@@ -13,7 +13,7 @@ class CartController extends Controller
     private function calculateTotalPrice($cartItems)
     {
         return $cartItems->sum(function ($item) {
-        return $item->product->price * $item->quantity;
+            return $item->product->price * $item->quantity;
         });
     }
 
@@ -22,12 +22,12 @@ class CartController extends Controller
     {
         $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
         if ($cartItems->isEmpty()) {
-            return view('cart.index', ['message' => 'Your cart is empty.']);
+            return view('cart.cart', ['message' => 'Your cart is empty.']);
         }
         // Calculate total price
         $totalPrice = $this->calculateTotalPrice($cartItems);
         // Pass total price to the view
-        return view('cart.index', compact('cartItems', 'totalPrice'));
+        return view('cart.cart', compact('cartItems', 'totalPrice'));
     }
 
     // add item to cart
