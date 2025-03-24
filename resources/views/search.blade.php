@@ -63,54 +63,41 @@
         </div>
     </x-slot>
 
-    <div class="w-full">
-        <div id="carouselExampleIndicators" class="carousel slide relative" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Search Bar -->
+            <div class="mb-6">
+                <form method="GET" action="{{ route('search') }}" class="flex justify-between items-center">
+                    <input type="text" name="query" placeholder="Search for products..." class="w-full p-3 border rounded-md" value="{{ request('query') }}">
+                    <button type="submit" class="ml-4 bg-indigo-600 text-white p-3 rounded-md">
+                        Search
+                    </button>
+                </form>
             </div>
-            <div class="carousel-inner">
-                <!-- Slide 1: Electronics -->
-                <div class="carousel-item active">
-                    <img src="/images/slide1.jpg" class="d-block w-100" style="max-height: 700px; object-fit: cover;" alt="Slide 1">
-                    <div class="carousel-caption d-none d-md-block text-start" style="top: 50%; transform: translateY(-50%);">
-                        <h1 class="text-white fw-bold display-4">Top Electronics</h1>
-                        <p class="text-white fs-5">Discover cutting-edge gadgets, laptops, and smart devices.</p>
-                        <a href="#" class="btn btn-light mt-3 fw-semibold">Check Details</a>
-                    </div>
+
+            <!-- Product List Section -->
+            <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12" id="product-list">
+                @forelse($products as $product)
+                <div class="product-item bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg" data-product-name="{{ $product->name }}">
+                    <!-- Product Image -->
+                    <img src="{{ $product->image_url }}" alt="Product Image" class="w-full h-48 object-cover rounded-lg">
+
+                    <!-- Product Name -->
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mt-4">{{ $product->name }}</h3>
+
+                    <!-- Product Description -->
+                    <p class="text-gray-600 dark:text-gray-300 mt-2">{{ $product->description }}</p>
+
+                    <!-- Product Price -->
+                    <span class="block text-gray-800 dark:text-gray-100 mt-4 font-bold">${{ $product->price }}</span>
+
+                    <!-- View Details Link -->
+                    <a href="{{ route('buyer.product.details', $product->id) }}" class="text-indigo-600 hover:text-indigo-800 mt-4 block">View Details</a>
                 </div>
-
-                <!-- Slide 2: Fashions -->
-                <div class="carousel-item">
-                    <img src="/images/slide2.jpg" class="d-block w-100" style="max-height: 700px; object-fit: cover;" alt="Slide 2">
-                    <div class="carousel-caption d-none d-md-block text-start" style="top: 50%; transform: translateY(-50%);">
-                        <h1 class="text-white fw-bold display-4">Fashion Highlights</h1>
-                        <p class="text-white fs-5">Step into the season with style – clothes, shoes, and more.</p>
-                        <a href="#" class="btn btn-light mt-3 fw-semibold">Check Details</a>
-                    </div>
-                </div>
-
-
-                <!-- Slide 3: Pet Supplies -->
-                <div class="carousel-item">
-                    <img src="/images/slide3.jpg" class="d-block w-100" style="max-height: 700px; object-fit: cover;" alt="Slide 3">
-                    <div class="carousel-caption d-none d-md-block text-start" style="top: 50%; transform: translateY(-50%);">
-                        <h1 class="text-white fw-bold display-4">Pet Essentials</h1>
-                        <p class="text-white fs-5">Everything your furry friends need, from food to toys.</p>
-                        <a href="#" class="btn btn-light mt-3 fw-semibold">Check Details</a>
-                    </div>
-                </div>
-
-
-                <!-- Controls -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                </button>
+                @empty
+                <p class="text-gray-500 dark:text-gray-300">No products found.</p>
+                @endforelse
             </div>
-        </div>
+        </div>s
     </div>
 </x-app-layout>

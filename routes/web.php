@@ -6,6 +6,7 @@ use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('home');
@@ -45,6 +46,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 });
+
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('buyer.product.details');
+Route::get('/search', [ProductController::class, 'search'])->name('search');
+
+
+
 
 
 
