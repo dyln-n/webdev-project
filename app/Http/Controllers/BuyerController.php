@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Rating;
 use Illuminate\Support\Facades\Auth;
 
 class BuyerController extends Controller
 {
     public function dashboard()
     {
-        $orders = Order::where('user_id', Auth::id())->get();
+        $orders = Order::where('user_id', Auth::id())
+            ->with('orderItems.product')
+            ->get();
         return view('dashboard.buyer', compact('orders'));
     }
 
@@ -20,19 +23,22 @@ class BuyerController extends Controller
         return view('dashboard.order_details', compact('order'));
     }
 
-    public function submitReview(Request $request, $id)
+    // BuyerController.php
+    public function rateOrder(Request $request, $id)
     {
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'review' => 'required|string',
-        ]);
+        $user = auth()->user();
 
-        auth()->user()->ratings()->create([
-            'product_id' => $id,
-            'rating' => $request->rating,
-            'review' => $request->review,
-        ]);
+        foreach ($request->input('rating', []) as $productId => $rating) {
+            $review = $request->input("review.$productId", null);
 
-        return redirect()->back()->with('success', 'Review submitted!');
+            if ($rating || $review) {
+                $user->ratings()->updateOrCreate(
+                    ['product_id' => $productId],
+                    ['rating' => $rating, 'review' => $review]
+                );
+            }
+        }
+
+        return response()->json(['message' => 'Thank you for your feedback!']);
     }
 }

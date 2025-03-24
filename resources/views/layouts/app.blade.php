@@ -17,9 +17,7 @@
     <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
 
-        @auth
-            @include('layouts.navigation')
-        @endauth
+        @include('layouts.navigation')
 
         <!-- Page Heading -->
         @isset($header)

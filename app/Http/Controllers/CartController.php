@@ -20,6 +20,12 @@ class CartController extends Controller
     // display cart items
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->role !== 'buyer') {
+            return redirect('/')->with('error', 'Please log in with a buyer account to access the cart.');
+        }
+
         $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
         if ($cartItems->isEmpty()) {
             return view('cart.cart', ['message' => 'Your cart is empty.']);

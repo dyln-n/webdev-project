@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
         if ($user->role == 'seller') {
             return redirect()->route('dashboard.seller');  // Redirect to seller dashboard
         } else {
-            return redirect()->route('dashboard.buyer');  // Redirect to buyer dashboard
+            return redirect('/'); // Redirect to buyer dashboard
         }
     }
 }

@@ -1,3 +1,7 @@
+@php
+    $pageTitle = 'Buyer Cart';
+@endphp
+
 <x-app-layout>
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-6">
@@ -73,3 +77,4 @@
         });
     </script>
 </x-app-layout>
+
