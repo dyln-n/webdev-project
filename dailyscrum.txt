@@ -90,3 +90,16 @@ Haitao:
 2. buyer dashboard frontend
 3. seller dashboard frontend, controller modification and validation
 4. connect web dashboard, register/login, seller, buyer pages
+
+
+2025-03-23
+----------
+Dylan:
+
+Amir:
+
+Haitao:
+1. tested cart features and modified its frontend 
+2. improved redirection for seller, buyer, register and login pages.
+3. fixed navigation and routes for user and cart icon on homepage
+4. created and tested buyer's order features(UI and database)
