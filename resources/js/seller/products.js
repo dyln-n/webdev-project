@@ -259,6 +259,7 @@ addBtn?.addEventListener("click", function (e) {
             if (existingError) existingError.remove();
         }
     });
+    
 });
 
 
