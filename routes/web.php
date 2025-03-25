@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Models\Order;
 use App\Models\Rating;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('home');
@@ -70,6 +71,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
     Route::get('/orders/{id}/products', [OrderController::class, 'getProducts']);
 });
+
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('buyer.product.details');
+Route::get('/search', [ProductController::class, 'search'])->name('search');
 
 
 require __DIR__ . '/auth.php';
