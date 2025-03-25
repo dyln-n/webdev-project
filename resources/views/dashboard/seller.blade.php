@@ -39,12 +39,12 @@
                     <thead>
                         <tr>
                             <th class="w-12 px-2 py-2"></th>
-                            <th class="w-1/6 px-2 py-2 text-left">Image</th>
-                            <th class="w-1/6 px-4 py-2 text-left">Name</th>
+                            <th class="w-1/6 px-4 py-2 text-center">Image</th>
+                            <th class="w-1/6 px-4 py-2 text-center">Name</th>
                             <th class="w-1/6 px-4 py-2 text-left">Description</th>
-                            <th class="w-[8%] px-4 py-2 text-left">Price</th>
-                            <th class="w-[8%] px-4 py-2 text-left">Stock</th>
-                            <th class="w-[8%] px-4 py-2 text-left">Category</th>
+                            <th class="w-1/6 px-4 py-2 text-center">Price</th>
+                            <th class="w-1/6 px-4 py-2 text-center">Stock</th>
+                            <th class="w-1/6 px-4 py-2 text-center">Category</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,31 +53,31 @@
                             <td class="w-12 px-2 py-2 text-center align-middle">
                                 <input type="radio" name="selected_product" value="{{ $product->id }}">
                             </td>
-                            <td class="px-2 py-2 align-middle">
+
+                            <td class="px-2 py-2 text-center align-middle">
                                 @if ($product->images->first())
                                 <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
                                     alt="{{ $product->name }}"
-                                    class="w-10 h-10 object-cover rounded-md transition-transform duration-200 hover:scale-150 relative z-10">
+                                    class="w-18 h-18 object-cover rounded-md transition-transform duration-200 hover:scale-105 relative z-10">
                                 @else
-                                <div class="w-10 h-10 bg-gray-200 text-gray-500 text-xs flex items-center justify-center rounded-md">
+                                <div class="w-18 h-18 bg-gray-200 text-gray-500 text-xs flex items-center justify-center rounded-md">
                                     N/A
                                 </div>
                                 @endif
                             </td>
-                            <td class="px-4 py-2 product-name truncate"
-                                title="{{ $product->name }}"
-                                data-full-name="{{ $product->name }}">
-                                {{ Str::limit($product->name, 20) }}
-                            </td>
 
-                            <td class="px-4 py-2 product-description truncate"
+                            <td class="px-4 py-2 text-center product-name whitespace-normal align-middle"
+                                data-full-name="{{ $product->name }}">
+                                {{ $product->name }}
+                            </td>
+                            <td class="px-4 py-2 text-left product-description whitespace-normal align-middle"
                                 title="{{ $product->description }}"
                                 data-full-description="{{ $product->description }}">
-                                {{ Str::limit($product->description, 20) }}
+                                {{ Str::limit($product->description, 60) }}
                             </td>
-                            <td class="px-4 py-2 product-price">{{ $product->price }}</td>
-                            <td class="px-4 py-2 product-stock">{{ $product->stock }}</td>
-                            <td class="px-4 py-2 product-category">{{ $product->category->name }}</td>
+                            <td class="px-4 py-2 text-center product-price align-middle">{{ $product->price }}</td>
+                            <td class="px-4 py-2 text-center product-stock align-middle">{{ $product->stock }}</td>
+                            <td class="px-4 py-2 text-center product-category align-middle">{{ $product->category->name }}</td>
                         </tr>
                         @endforeach
                     </tbody>
