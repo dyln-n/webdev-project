@@ -6,6 +6,11 @@
                 {{ $category->name }}
             </h2>
 
+            <!-- Category Description -->
+            <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
+                {{ $category->description }}
+            </p>
+
             <!-- Product List Section -->
             <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12" id="product-list">
                 @foreach($products as $product)
