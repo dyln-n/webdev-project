@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Order;
 use App\Models\Rating;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     return view('home');
@@ -32,14 +33,15 @@ Route::middleware(['auth'])->group(function () {
         $order = Order::with('orderItems.product')->findOrFail($id);
         return $order->orderItems->map(fn($item) => [
             'id' => $item->product->id,
-            'name' => $item->product->name
+            'name' => $item->product->name,
+            'quantity' => $item->quantity,
         ]);
     });
 
-    // routes/web.php
+
     Route::get('/orders/{id}/ratings', function ($id) {
         $user = Auth::user();
-        $order = Order::with('orderItems.product')->findOrFail($id);
+        $order = Order::with('orderItems.product')->where('id', $id)->where('user_id', $user->id)->firstOrFail();
 
         return $order->orderItems->map(function ($item) use ($user) {
             $rating = Rating::where('user_id', $user->id)
@@ -47,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
                 ->first();
 
             return [
+                'id' => $item->product->id,
                 'name' => $item->product->name,
                 'rating' => $rating?->rating,
                 'review' => $rating?->review,
@@ -54,12 +57,19 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
+
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
     Route::post('/cart', [CartController::class, 'add'])->name('cart.add');
     Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+
+    Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
+    Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::get('/orders/{id}/products', [OrderController::class, 'getProducts']);
 });
+
 
 require __DIR__ . '/auth.php';

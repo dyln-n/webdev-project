@@ -20,7 +20,7 @@ class SellerController extends Controller
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
@@ -29,8 +29,13 @@ class SellerController extends Controller
             'seller_id' => Auth::id(),
         ]);
 
-        return redirect()->route('dashboard.seller')->with('success', 'Product added successfully!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Product added successfully!',
+            'product' => $product
+        ], 200);
     }
+
 
     // Update a product
     public function update(Request $request, $id)
@@ -49,7 +54,7 @@ class SellerController extends Controller
             'stock' => $request->stock
         ]);
 
-        // ✅ Explicitly return status code 200 to fix JS fetch issue
+        // Explicitly return status code 200 to fix JS fetch issue
         return response()->json([
             'success' => true,
             'message' => 'Product updated successfully!',
