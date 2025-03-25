@@ -23,7 +23,7 @@
 
                 <!-- Add to Cart Button (Add action later on) -->
                 <div class="mt-6">
-                    <form action="" method="POST">
+                    <form action="">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <button type="submit" class="bg-indigo-600 text-white p-3 rounded-md">Add to Cart</button>
