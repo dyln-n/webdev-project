@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ProductImage;
 
 class SellerController extends Controller
 {
@@ -18,6 +19,7 @@ class SellerController extends Controller
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $product = Product::create([
@@ -28,6 +30,16 @@ class SellerController extends Controller
             'category_id' => $request->category_id,
             'seller_id' => Auth::id(),
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+
+            ProductImage::create([
+                'product_id' => $product->id,
+                'image_path' => $path,
+                'is_main' => true
+            ]);
+        }
 
         return response()->json([
             'success' => true,
@@ -46,6 +58,7 @@ class SellerController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $product->update([
@@ -53,6 +66,15 @@ class SellerController extends Controller
             'price' => $request->price,
             'stock' => $request->stock
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+
+            ProductImage::updateOrCreate(
+                ['product_id' => $product->id, 'is_main' => true],
+                ['image_path' => $path]
+            );
+        }
 
         // Explicitly return status code 200 to fix JS fetch issue
         return response()->json([
