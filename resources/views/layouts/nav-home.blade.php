@@ -9,7 +9,7 @@
         <!-- Center: Categories -->
         <div class="hidden sm:flex gap-10 font-medium">
             <a href="{{ route('category.show', 'electronics') }}" class="text-gray-800 dark:text-gray-200 hover:text-indigo-600 no-underline">Electronics</a>
-            <a href="{{ route('category.show', 'fashion') }}" class="text-gray-800 dark:text-gray-200 hover:text-indigo-600 no-underline">Fashions</a>
+            <a href="{{ route('category.show', 'fashion') }}" class="text-gray-800 dark:text-gray-200 hover:text-indigo-600 no-underline">Fashion</a>
             <a href="{{ route('category.show', 'pet-supplies') }}" class="text-gray-800 dark:text-gray-200 hover:text-indigo-600 no-underline">Pet Supplies</a>
         </div>
 

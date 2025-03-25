@@ -29,7 +29,7 @@
                         </div>
                     </div>
 
-                    <!-- Slide 2: Fashions -->
+                    <!-- Slide 2: Fashion -->
                     <div class="carousel-item">
                         <img src="/images/slide2.jpg" class="d-block w-100" style="max-height: 700px; object-fit: cover;" alt="Slide 2">
                         <div class="carousel-caption d-none d-md-block text-start" style="top: 50%; transform: translateY(-50%);">
