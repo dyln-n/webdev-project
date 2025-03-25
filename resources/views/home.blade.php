@@ -25,17 +25,17 @@
                         <div class="carousel-caption d-none d-md-block text-start" style="top: 50%; transform: translateY(-50%);">
                             <h1 class="text-white fw-bold display-4">Top Electronics</h1>
                             <p class="text-white fs-5">Discover cutting-edge gadgets, laptops, and smart devices.</p>
-                            <a href="#" class="btn btn-light mt-3 fw-semibold">Check Details</a>
+                            <a href="{{ route('category.show', 'electronics') }}" class="btn btn-light mt-3 fw-semibold">Check Details</a>
                         </div>
                     </div>
 
-                    <!-- Slide 2: Fashions -->
+                    <!-- Slide 2: Fashion -->
                     <div class="carousel-item">
                         <img src="/images/slide2.jpg" class="d-block w-100" style="max-height: 700px; object-fit: cover;" alt="Slide 2">
                         <div class="carousel-caption d-none d-md-block text-start" style="top: 50%; transform: translateY(-50%);">
                             <h1 class="text-white fw-bold display-4">Fashion Highlights</h1>
                             <p class="text-white fs-5">Step into the season with style – clothes, shoes, and more.</p>
-                            <a href="#" class="btn btn-light mt-3 fw-semibold">Check Details</a>
+                            <a href="{{ route('category.show', 'fashion') }}" class="btn btn-light mt-3 fw-semibold">Check Details</a>
                         </div>
                     </div>
 
@@ -45,7 +45,7 @@
                         <div class="carousel-caption d-none d-md-block text-start" style="top: 50%; transform: translateY(-50%);">
                             <h1 class="text-white fw-bold display-4">Pet Essentials</h1>
                             <p class="text-white fs-5">Everything your furry friends need, from food to toys.</p>
-                            <a href="#" class="btn btn-light mt-3 fw-semibold">Check Details</a>
+                            <a href="{{ route('category.show', 'pet-supplies') }}" class="btn btn-light mt-3 fw-semibold">Check Details</a>
                         </div>
                     </div>
                 </div>
