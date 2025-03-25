@@ -230,10 +230,12 @@ form.addEventListener("submit", function (e) {
         if (isUpdate) {
             const row = document.querySelector(`tr[data-id="${id}"]`);
             if (row) {
-                row.querySelector(".product-name").textContent = form.name.value.slice(0, 20) + (form.name.value.length > 20 ? '…' : '');
+                row.querySelector(".product-name").textContent = form.name.value;
                 row.querySelector(".product-name").dataset.fullName = form.name.value;
-                row.querySelector(".product-description").textContent = form.description.value.slice(0, 20) + (form.description.value.length > 20 ? '…' : '');
-                row.querySelector(".product-description").dataset.fullDescription = form.description.value;
+
+                const desc = form.description.value;
+                row.querySelector(".product-description").textContent = desc.length > 60 ? desc.slice(0, 60) + '…' : desc;
+                row.querySelector(".product-description").dataset.fullDescription = desc;
                 row.querySelector(".product-price").textContent = parseFloat(form.price.value).toFixed(2);
                 row.querySelector(".product-stock").textContent = form.stock.value;
             }
