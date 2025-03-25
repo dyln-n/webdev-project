@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
         radio.checked = false;
         clearSelection();
     });
-    
+
 });
 
     // Add button
@@ -192,52 +192,64 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Submit
-    form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        if (!validateFormFields()) return;
+form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!validateFormFields()) return;
 
-        const isUpdate = form.querySelector("input[name='_method']");
-        const id = form.product_id.value;
+    const isUpdate = form.querySelector("input[name='_method']");
+    const id = form.product_id.value;
+    const url = form.action;
 
-        const formData = new FormData(form);
-        const url = form.action;
+    const formData = new FormData(form);
+    const imageInput = form.querySelector('input[type="file"][name="image"]');
 
-        fetch(url, {
-            method: isUpdate ? "POST" : "POST",
-            headers: {
-                "X-CSRF-TOKEN": form.querySelector("input[name='_token']").value
-            },
-            body: formData
-        })
-        .then(res => res.json())
-        .then(result => {
-            if (!result.success) {
-                alert(result.message || "Error");
-                return;
+    if (imageInput && imageInput.files.length > 0) {
+        const file = imageInput.files[0];
+        if (file.size > 2 * 1024 * 1024) {
+            alert("Image must be smaller than 2MB");
+            return;
+        }
+        formData.append('image', file);
+    }
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": form.querySelector("input[name='_token']").value,
+            "Accept": "application/json"
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (!result.success) {
+            alert(result.message || "Error");
+            return;
+        }
+
+        if (isUpdate) {
+            const row = document.querySelector(`tr[data-id="${id}"]`);
+            if (row) {
+                row.querySelector(".product-name").textContent = form.name.value.slice(0, 20) + (form.name.value.length > 20 ? '…' : '');
+                row.querySelector(".product-name").dataset.fullName = form.name.value;
+                row.querySelector(".product-description").textContent = form.description.value.slice(0, 20) + (form.description.value.length > 20 ? '…' : '');
+                row.querySelector(".product-description").dataset.fullDescription = form.description.value;
+                row.querySelector(".product-price").textContent = parseFloat(form.price.value).toFixed(2);
+                row.querySelector(".product-stock").textContent = form.stock.value;
             }
+        } else {
+            window.location.reload();
+        }
 
-            if (isUpdate) {
-                const row = document.querySelector(`tr[data-id="${id}"]`);
-                if (row) {
-                    row.querySelector(".product-name").textContent = form.name.value.slice(0, 15) + (form.name.value.length > 15 ? '…' : '');
-                    row.querySelector(".product-name").dataset.fullName = form.name.value;
-                    row.querySelector(".product-description").textContent = form.description.value.slice(0, 15) + (form.description.value.length > 15 ? '…' : '');
-                    row.querySelector(".product-description").dataset.fullDescription = form.description.value;
-                    row.querySelector(".product-price").textContent = parseFloat(form.price.value).toFixed(2);
-                    row.querySelector(".product-stock").textContent = form.stock.value;
-                }
-            } else {
-                window.location.reload(); // simplest way to refresh added row
-            }
-
-            closeModal();
-            clearSelection();
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Server error.");
-        });
+        closeModal();
+        clearSelection();
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Server error.");
     });
+});
+
 
     // Delete
     deleteBtn.addEventListener("click", () => {

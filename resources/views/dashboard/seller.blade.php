@@ -1,3 +1,11 @@
+<style>
+    .product-image-cell img:hover {
+        z-index: 50;
+        position: relative;
+    }
+</style>
+
+
 <x-app-layout>
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -31,11 +39,12 @@
                     <thead>
                         <tr>
                             <th class="w-12 px-2 py-2"></th>
-                            <th class="w-1/5 px-4 py-2 text-left">Name</th>
-                            <th class="w-1/5 px-4 py-2 text-left">Description</th>
-                            <th class="w-1/5 px-4 py-2 text-left">Price</th>
-                            <th class="w-1/5 px-4 py-2 text-left">Stock</th>
-                            <th class="w-1/5 px-4 py-2 text-left">Category</th>
+                            <th class="w-1/6 px-2 py-2 text-left">Image</th>
+                            <th class="w-1/6 px-4 py-2 text-left">Name</th>
+                            <th class="w-1/6 px-4 py-2 text-left">Description</th>
+                            <th class="w-[8%] px-4 py-2 text-left">Price</th>
+                            <th class="w-[8%] px-4 py-2 text-left">Stock</th>
+                            <th class="w-[8%] px-4 py-2 text-left">Category</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,15 +53,27 @@
                             <td class="w-12 px-2 py-2 text-center align-middle">
                                 <input type="radio" name="selected_product" value="{{ $product->id }}">
                             </td>
+                            <td class="px-2 py-2 align-middle">
+                                @if ($product->images->first())
+                                <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+                                    alt="{{ $product->name }}"
+                                    class="w-10 h-10 object-cover rounded-md transition-transform duration-200 hover:scale-150 relative z-10">
+                                @else
+                                <div class="w-10 h-10 bg-gray-200 text-gray-500 text-xs flex items-center justify-center rounded-md">
+                                    N/A
+                                </div>
+                                @endif
+                            </td>
                             <td class="px-4 py-2 product-name truncate"
                                 title="{{ $product->name }}"
                                 data-full-name="{{ $product->name }}">
-                                {{ Str::limit($product->name, 15) }}
+                                {{ Str::limit($product->name, 20) }}
                             </td>
+
                             <td class="px-4 py-2 product-description truncate"
                                 title="{{ $product->description }}"
                                 data-full-description="{{ $product->description }}">
-                                {{ Str::limit($product->description, 15) }}
+                                {{ Str::limit($product->description, 20) }}
                             </td>
                             <td class="px-4 py-2 product-price">{{ $product->price }}</td>
                             <td class="px-4 py-2 product-stock">{{ $product->stock }}</td>
@@ -69,7 +90,7 @@
                     <h2 id="modal-title" class="text-xl font-semibold mb-4">Manage Product</h2>
                     <form id="product-form" method="POST" action="{{ route('seller.products.store') }}">
                         @csrf
-                        <input type="hidden" id="product_id" name="product_id" value="">
+                        <input type="hidden" id="product_id" name="product_id" value="" enctype="multipart/form-data">
 
                         <div class="mb-4">
                             <x-input-label for="name" :value="__('Product Name')" />
@@ -103,6 +124,11 @@
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="product-image" class="block font-medium text-sm text-gray-700">Product Image</label>
+                            <input type="file" name="image" id="product-image" accept="image/*" class="mt-1 block w-full border rounded px-3 py-2">
                         </div>
 
                         <div class="mt-6 flex justify-end gap-4">
