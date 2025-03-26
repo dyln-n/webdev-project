@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
                 'name' => $item->product->name,
                 'rating' => $rating?->rating,
                 'review' => $rating?->review,
+                'image_path' => $item->product->main_image_path,
             ];
         });
     });

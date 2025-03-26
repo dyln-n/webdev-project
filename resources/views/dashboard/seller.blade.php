@@ -130,7 +130,6 @@
                             <label for="product-image" class="block font-medium text-sm text-gray-700">Product Image</label>
                             <input type="file" name="image" id="product-image" accept="image/*" class="mt-1 block w-full border rounded px-3 py-2">
                         </div>
-
                         <div class="mt-6 flex justify-end gap-4">
                             <button type="submit"
                                 class="bg-gray-800 text-white px-4 py-2 rounded w-28 h-10 justify-center text-center"

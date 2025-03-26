@@ -60,7 +60,7 @@ class OrderController extends Controller
 
     public function getProducts($orderId)
     {
-        $order = Order::with('orderItems.product')
+        $order = Order::with('orderItems.product.images')
             ->where('id', $orderId)
             ->where('user_id', Auth::id())
             ->firstOrFail();
@@ -69,7 +69,8 @@ class OrderController extends Controller
             return [
                 'id' => $item->product->id,
                 'name' => $item->product->name,
-                'quantity' => $item->quantity
+                'quantity' => $item->quantity,
+                'image_path' => $item->product->main_image_path
             ];
         });
 

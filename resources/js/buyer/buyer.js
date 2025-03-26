@@ -35,14 +35,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 reviewed.forEach(item => {
                     const section = document.createElement('div');
+                    section.classList.add("flex", "items-start", "mb-4", "gap-4");
                     section.innerHTML = `
-                        <label class="font-semibold block mb-1">${item.name}</label>
-                        <div class="mb-2">
-                            ${Array.from({ length: 5 }, (_, i) => `
-                                <span class="${i < item.rating ? 'text-yellow-400' : 'text-gray-400'} text-xl">&#9733;</span>
-                            `).join('')}
+                        <img src="${item.image_path}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mt-1" />
+                        <div class="flex-1">
+                            <label class="font-semibold block mb-1">${item.name}</label>
+                            <div class="mb-2">
+                                ${Array.from({ length: 5 }, (_, i) => `
+                                    <span class="${i < item.rating ? 'text-yellow-400' : 'text-gray-300'}">&#9733;</span>
+                                `).join('')}
+                            </div>
+                            <p class="text-sm text-gray-600">${item.review || ''}</p>
                         </div>
-                        <div class="italic">${item.review || ''}</div>
                     `;
                     fields.appendChild(section);
                 });
@@ -51,21 +55,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     submitBtn.classList.remove('hidden');
                     cancelBtn.innerText = 'Cancel';
 
-                    for (const product of unreviewed) {
+                    unreviewed.forEach(item => {
                         const section = document.createElement('div');
-                        section.classList.add('mb-4');
+                        section.classList.add("flex", "items-start", "mb-4", "gap-4");
                         section.innerHTML = `
-                            <label class="font-semibold block mb-1">${product.name}</label>
-                            <div class="rating mb-2" data-product-id="${product.id}">
-                                ${Array.from({ length: 5 }, (_, i) => `
-                                    <span class="star text-gray-400 cursor-pointer text-xl" data-value="${i + 1}" data-product-id="${product.id}">&#9733;</span>
-                                `).join('')}
+                            <img src="${item.image_path}" alt="${item.name}" class="w-20 h-20 object-cover rounded-md mt-1" />
+                            <div class="flex-1">
+                                <label class="font-semibold block mb-1">${item.name}</label>
+                                <div class="mb-2">
+                                    ${Array.from({ length: 5 }, (_, i) => `
+                                        <span class="star text-gray-300 cursor-pointer" data-index="${i + 1}" data-product-id="${item.product_id}">&#9733;</span>
+                                    `).join('')}
+                                </div>
+                                <textarea name="reviews[${item.product_id}]" rows="2" class="w-full border rounded p-2 text-sm" placeholder="Write a review (optional)"></textarea>
                             </div>
-                            <input type="hidden" name="rating[${product.id}]" id="rating-input-${product.id}" value="0">
-                            <textarea name="review[${product.id}]" class="w-full border rounded p-2" placeholder="Write a review (optional)"></textarea>
                         `;
                         fields.appendChild(section);
-                    }
+                    });
                 } else {
                     submitBtn.classList.add('hidden');
                     cancelBtn.innerText = 'Close';
@@ -79,27 +85,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const editList = document.getElementById('edit-product-list');
                 editList.innerHTML = '';
-
                 const seenIds = new Set();
+
                 products.forEach(product => {
-               if (seenIds.has(product.id)) return;
-               seenIds.add(product.id);
+                    if (seenIds.has(product.id)) return;
+                    seenIds.add(product.id);
 
-               const row = document.createElement('div');
-            row.classList.add('flex', 'items-center', 'justify-between', 'space-x-4');
+                    const row = document.createElement('div');
+                    row.classList.add('flex', 'items-center', 'justify-between', 'space-x-4', 'mb-4');
 
-               row.innerHTML = `
-        <label class="w-1/3 font-semibold">${product.name}</label>
-        <input type="number" min="1" name="items[${product.id}]" value="${product.quantity}" class="w-20 border rounded px-2 py-1 text-right" />
-        <button type="button" class="remove-item bg-red-600 text-white px-4 py-2 rounded" data-product-id="${product.id}">Remove</button>
-    `;
+                      row.innerHTML = `
+                    <div class="flex items-center space-x-4 w-1/2">
+                    <img src="${product.image_path}" alt="${product.name}" class="w-20 h-20 object-cover rounded-md border" />
+                     <label class="font-semibold">${product.name}</label>
+                     </div>
+                     <input type="number" min="1" name="items[${product.id}]" value="${product.quantity}" class="w-20 border rounded px-2 py-1 text-right" />
+                    <button type="button" class="remove-item bg-red-600 text-white px-4 py-2 rounded" data-product-id="${product.id}">Remove</button>
+                    `;
 
-    editList.appendChild(row);
-});
+                    editList.appendChild(row);
+                });
 
                 editList.querySelectorAll('.remove-item').forEach(btn => {
                     btn.addEventListener('click', () => {
-                        btn.closest('div.mb-2')?.remove();
+                        btn.closest('div.flex')?.remove();
                     });
                 });
 
@@ -118,14 +127,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // submit ratings
     document.addEventListener('click', function (e) {
         if (e.target.classList.contains('star')) {
-            const value = parseInt(e.target.dataset.value);
+            const value = parseInt(e.target.dataset.index);
             const productId = e.target.dataset.productId;
-            document.getElementById(`rating-input-${productId}`).value = value;
+            document.querySelector(`input[name="rating[${productId}]"]`)?.setAttribute("value", value);
 
-            const stars = document.querySelectorAll(`.rating[data-product-id="${productId}"] .star`);
+            const stars = document.querySelectorAll(`.star[data-product-id="${productId}"]`);
             stars.forEach((star, index) => {
                 star.classList.toggle('text-yellow-400', index < value);
-                star.classList.toggle('text-gray-400', index >= value);
+                star.classList.toggle('text-gray-300', index >= value);
             });
         }
 
@@ -165,43 +174,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // submit update
     document.getElementById('edit-form').addEventListener('submit', async function (e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    const inputs = this.querySelectorAll('input[name^="items["]');
-    const items = {};
+        const inputs = this.querySelectorAll('input[name^="items["]');
+        const items = {};
 
-    inputs.forEach(input => {
-        const match = input.name.match(/^items\[(\d+)\]$/);
-        if (match) {
-            const productId = match[1];
-            const quantity = parseInt(input.value);
-            if (!isNaN(quantity) && quantity > 0) {
-                items[productId] = quantity;
+        inputs.forEach(input => {
+            const match = input.name.match(/^items\[(\d+)\]$/);
+            if (match) {
+                const productId = match[1];
+                const quantity = parseInt(input.value);
+                if (!isNaN(quantity) && quantity > 0) {
+                    items[productId] = quantity;
+                }
             }
+        });
+
+        const csrfToken = document.querySelector('input[name="_token"]').value;
+
+        const response = await fetch(this.action, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ items })
+        });
+
+        if (response.ok) {
+            alert('Order updated successfully!');
+            window.location.reload();
+        } else {
+            const error = await response.json();
+            alert(error.message || 'Failed to update order.');
         }
     });
-
-    const csrfToken = document.querySelector('input[name="_token"]').value;
-
-    const response = await fetch(this.action, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken,
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ items })
-    });
-
-    if (response.ok) {
-        alert('Order updated successfully!');
-        window.location.reload();
-    } else {
-        const error = await response.json();
-        alert(error.message || 'Failed to update order.');
-    }
-});
-
 
     document.querySelectorAll('.close-modal').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -227,25 +235,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-document.getElementById('cancel-order-btn').addEventListener('click', async function () {
-    const orderId = this.dataset.orderId;
+    document.getElementById('cancel-order-btn').addEventListener('click', async function () {
+        const orderId = this.dataset.orderId;
 
-    if (!confirm('Are you sure you want to cancel this order?')) return;
+        if (!confirm('Are you sure you want to cancel this order?')) return;
 
-    const response = await fetch(`/orders/${orderId}/cancel`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-            'Accept': 'application/json'
+        const response = await fetch(`/orders/${orderId}/cancel`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                'Accept': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            alert('Order canceled successfully.');
+            location.reload();
+        } else {
+            alert('Failed to cancel order.');
         }
     });
-
-    if (response.ok) {
-        alert('Order canceled successfully.');
-        location.reload();
-    } else {
-        alert('Failed to cancel order.');
-    }
-});
-
 });

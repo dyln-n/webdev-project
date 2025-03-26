@@ -18,6 +18,8 @@ class Product extends Model
         'seller_id',
     ];
 
+    protected $appends = ['main_image_path'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -31,5 +33,13 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function getMainImagePathAttribute()
+    {
+        $image = $this->images()->where('is_main', 1)->first();
+        return $image
+            ? asset('storage/' . $image->image_path)
+            : asset('images/placeholder.png');
     }
 }
