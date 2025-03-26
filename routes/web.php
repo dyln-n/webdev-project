@@ -60,10 +60,10 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+    
     //TODO: check route
     Route::get('/products', [ProductController::class, 'details'])->name('products.details');
+    Route::get('/checkout', function () {return view('checkout');})->name('checkout');
     Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::post('/cart/save', [CartController::class, 'saveToDatabase'])->name('cart.save');
@@ -74,6 +74,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
     Route::get('/orders/{id}/products', [OrderController::class, 'getProducts']);
 });
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('buyer.product.details');
 Route::get('/search', [ProductController::class, 'search'])->name('search');

@@ -58,4 +58,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Rating::class);
     }
+
+    // Define the cart relationship
+    public function cart()
+    {
+        return $this->hasMany(Cart::class, 'user_id');
+    }
 }

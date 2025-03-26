@@ -61,6 +61,7 @@ class CartController extends Controller
         }
 
         if (Auth::check()) {
+            // AUTH USER - DATABASE CART
             DB::transaction(function () use ($product, $id) {
                 $cartItem = Cart::updateOrCreate(
                     [
@@ -70,30 +71,16 @@ class CartController extends Controller
                     [
                         'quantity' => DB::raw('quantity + 1')
                     ]
-                );
-                
+                ); 
                 // Decrement product stock
                 $product->decrement('stock');
             });
 
-            $cart = Cart::where('user_id', Auth::id())
-                ->with('product')
-                ->get()
-                ->keyBy('product_id');
-            
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Product added to cart',
-                    'cart' => $cart->map(function ($item) {
-                        return [
-                            'id' => $item->product_id,
-                            'name' => $item->product->name,
-                            'price' => $item->price,
-                            'quantity' => $item->quantity,
-                            'product' => $item->product
-                        ];
-                    })
-                ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Product added to cart',
+                'cart_count' => Auth::user()->cart()->count(), // For auth counter
+            ]);
         } else {
             // Get cart from session or create a new one
             $cart = Session::get('cart', []);
@@ -116,7 +103,9 @@ class CartController extends Controller
             Session::put('cart', $cart);
 
             return response()->json([
+                'success' => true,
                 'message' => 'Product added to cart',
+                'cart_count' => array_sum(array_column($cart, 'quantity')), // For guest counter
                 'cart' => $cart
             ]);
         }

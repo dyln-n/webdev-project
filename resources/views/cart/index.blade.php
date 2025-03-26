@@ -47,14 +47,14 @@
             </table>
         @endif
 
-        <div class="mt-4">
-            <a href="{{ route('products.details') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
+        <div class="mt-4 d-flex justify-content-between align-items-center">
+            <a href="{{ route('home') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
                 Continue Shopping
             </a>
             @if(!empty($cart))
-                <button id="checkout-btn" class="ml-4 bg-green-500 text-white px-4 py-2 rounded">
+                <a href="{{ auth()->check() ? route('checkout') : route('register') }}"  class="ms-auto bg-green-500 text-white px-4 py-2 rounded">
                     Proceed to Checkout
-                </button>
+                </a>
             @endif
         </div>
     </div>
