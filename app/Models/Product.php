@@ -42,4 +42,9 @@ class Product extends Model
             ? asset('storage/' . $image->image_path)
             : asset('images/placeholder.png');
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }
