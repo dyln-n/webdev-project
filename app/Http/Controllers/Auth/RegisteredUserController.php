@@ -9,8 +9,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Http\Controllers\CartController; 
 
 class RegisteredUserController extends Controller
 {
@@ -47,11 +49,24 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        // Save guest cart to database after registration
+        $this->transferGuestCartToUser($user);
+
         // Redirect based on the user's role
         if ($user->role == 'seller') {
             return redirect()->route('dashboard.seller');  // Redirect to seller dashboard
         } else {
             return redirect('/'); // Redirect to buyer dashboard
+        }
+    }
+
+    protected function transferGuestCartToUser($user): void
+    {
+        try {
+            app(CartController::class)->saveToDatabase();
+        } catch (\Exception $e) {
+            Log::error('Cart transfer failed during registration: '.$e->getMessage());
+            // Continue with registration even if cart transfer fails
         }
     }
 }

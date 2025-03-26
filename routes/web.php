@@ -60,12 +60,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    
+    //TODO: check route
+    Route::get('/products', [ProductController::class, 'details'])->name('products.details');
+    Route::get('/checkout', function () {return view('checkout');})->name('checkout');
+    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
+    Route::post('/cart/save', [CartController::class, 'saveToDatabase'])->name('cart.save');
     Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
-    Route::post('/cart', [CartController::class, 'add'])->name('cart.add');
-    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 
     Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
@@ -73,10 +75,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/{id}/products', [OrderController::class, 'getProducts']);
 });
 
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('buyer.product.details');
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/category/{category}', [ProductController::class, 'showCategory'])->name('category.show');
-
 
 
 require __DIR__ . '/auth.php';
