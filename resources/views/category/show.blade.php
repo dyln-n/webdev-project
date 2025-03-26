@@ -15,7 +15,7 @@
             <div class="mb-6">
                 <form method="GET" class="flex justify-start items-center">
                     <label for="sort" class="mr-4 text-gray-800 dark:text-gray-100">Sort by:</label>
-                    <select name="sort" id="sort" class="p-2 border rounded-md" onchange="this.form.submit()">
+                    <select name="sort" id="sort" class="p-2 border rounded-md w-40" onchange="this.form.submit()">
                         <!-- Default empty option for 'no sorting' -->
                         <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
                         <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Low to High</option>
