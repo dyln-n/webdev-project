@@ -29,7 +29,7 @@
                         <form action="">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <button type="submit" class="bg-indigo-600 text-white p-3 rounded-md">Add to Cart</button>
+                            <button type="submit" class="add-to-cart bg-indigo-600 text-white p-3 rounded-md">Add to Cart</button>
                         </form>
                     </div>
                 </div>
