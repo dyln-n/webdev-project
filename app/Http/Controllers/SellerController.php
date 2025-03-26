@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ProductImage;
 
 class SellerController extends Controller
 {
@@ -18,9 +19,10 @@ class SellerController extends Controller
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
@@ -29,8 +31,23 @@ class SellerController extends Controller
             'seller_id' => Auth::id(),
         ]);
 
-        return redirect()->route('dashboard.seller')->with('success', 'Product added successfully!');
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+
+            ProductImage::create([
+                'product_id' => $product->id,
+                'image_path' => $path,
+                'is_main' => true
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product added successfully!',
+            'product' => $product
+        ], 200);
     }
+
 
     // Update a product
     public function update(Request $request, $id)
@@ -41,6 +58,7 @@ class SellerController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $product->update([
@@ -49,7 +67,16 @@ class SellerController extends Controller
             'stock' => $request->stock
         ]);
 
-        // ✅ Explicitly return status code 200 to fix JS fetch issue
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+
+            ProductImage::updateOrCreate(
+                ['product_id' => $product->id, 'is_main' => true],
+                ['image_path' => $path]
+            );
+        }
+
+        // Explicitly return status code 200 to fix JS fetch issue
         return response()->json([
             'success' => true,
             'message' => 'Product updated successfully!',

@@ -28,12 +28,16 @@ class BuyerController extends Controller
     {
         $user = auth()->user();
 
+        // 验证该订单是否属于当前用户
+        $order = Order::where('id', $id)->where('user_id', $user->id)->firstOrFail();
+
         foreach ($request->input('rating', []) as $productId => $rating) {
             $review = $request->input("review.$productId", null);
 
-            if ($rating || $review) {
-                $user->ratings()->updateOrCreate(
-                    ['product_id' => $productId],
+            // 确保至少有评分或评论
+            if (!empty($rating) || !empty($review)) {
+                Rating::updateOrCreate(
+                    ['user_id' => $user->id, 'product_id' => $productId],
                     ['rating' => $rating, 'review' => $review]
                 );
             }
