@@ -10,8 +10,13 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        return view('product.details', compact('product'));
+        $product = Product::with('seller')->findOrFail($id);
+        $relatedProducts = Product::where('id', '!=', $id)
+            ->inRandomOrder()
+            ->limit(3)
+            ->get();
+
+        return view('product.details', compact('product', 'relatedProducts'));
     }
 
     public function search(Request $request)
