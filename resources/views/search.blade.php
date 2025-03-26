@@ -16,7 +16,7 @@
                 <form method="GET" action="{{ route('search') }}" class="flex justify-start items-center">
                     <label for="sort" class="mr-4 text-gray-800 dark:text-gray-100">Sort by Price:</label>
                     <select name="sort" id="sort" class="p-2 border rounded-md w-40" onchange="this.form.submit()">
-                    <option value="asc" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
+                        <option value="asc" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
                         <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Low to High</option>
                         <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>High to Low</option>
                     </select>
@@ -44,6 +44,7 @@
 
                     <!-- Product Description -->
                     <p class="text-gray-600 dark:text-gray-300 mt-2">{{ $product->description }}</p>
+
 
                     <!-- Product Price -->
                     <span class="block text-gray-800 dark:text-gray-100 mt-4 font-bold">${{ $product->price }}</span>

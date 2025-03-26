@@ -6,13 +6,13 @@
                 <!-- Product Image -->
                 <div class="w-1/3 flex justify-start">
                     @if ($product->images->first())
-                        <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
-                             alt="{{ $product->name }}"
-                             class="h-full w-full object-cover rounded-lg">
+                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+                        alt="{{ $product->name }}"
+                        class="h-full w-full object-cover rounded-lg">
                     @else
-                        <div class="w-full h-full bg-gray-200 text-gray-500 text-xs flex items-center justify-center rounded-lg">
-                            N/A
-                        </div>
+                    <div class="w-full h-full bg-gray-200 text-gray-500 text-xs flex items-center justify-center rounded-lg">
+                        N/A
+                    </div>
                     @endif
                 </div>
 
@@ -20,9 +20,18 @@
                 <div class="w-2/3 pl-6">
                     <h3 class="text-3xl font-semibold text-gray-800 dark:text-gray-100 mt-4">{{ $product->name }}</h3>
                     <p class="text-gray-600 dark:text-gray-300 mt-2">{{ $product->description }}</p>
+                    <!-- Product Rating -->
+                    <p class="text-gray-600 dark:text-gray-300 mt-4">
+                        @if ($averageRating !== null)
+                        Average Rating: {{ number_format($averageRating, 1) }} / 5
+                        @else
+                        No ratings yet
+                        @endif
+                    </p>
                     <span class="block text-gray-800 dark:text-gray-100 mt-4 font-bold text-xl">${{ $product->price }}</span>
                     <p class="text-gray-600 dark:text-gray-300 mt-4">Stock: {{ $product->stock }}</p>
                     <p class="text-gray-600 dark:text-gray-300 mt-4">Seller: {{ $product->seller->name }}</p>
+
 
                     <!-- Add to Cart Button -->
                     <div class="mt-6">

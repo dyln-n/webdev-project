@@ -12,8 +12,13 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('product.details', compact('product'));
+
+        // Get the average rating, or return null if no ratings exist
+        $averageRating = $product->ratings->isEmpty() ? null : $product->ratings->avg('rating');
+
+        return view('product.details', compact('product', 'averageRating'));
     }
+
     public function search(Request $request)
     {
 
