@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Order;
 use App\Models\Rating;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
@@ -33,14 +34,15 @@ Route::middleware(['auth'])->group(function () {
         $order = Order::with('orderItems.product')->findOrFail($id);
         return $order->orderItems->map(fn($item) => [
             'id' => $item->product->id,
-            'name' => $item->product->name
+            'name' => $item->product->name,
+            'quantity' => $item->quantity,
         ]);
     });
 
-    // routes/web.php
+
     Route::get('/orders/{id}/ratings', function ($id) {
         $user = Auth::user();
-        $order = Order::with('orderItems.product')->findOrFail($id);
+        $order = Order::with('orderItems.product')->where('id', $id)->where('user_id', $user->id)->firstOrFail();
 
         return $order->orderItems->map(function ($item) use ($user) {
             $rating = Rating::where('user_id', $user->id)
@@ -48,12 +50,15 @@ Route::middleware(['auth'])->group(function () {
                 ->first();
 
             return [
+                'id' => $item->product->id,
                 'name' => $item->product->name,
                 'rating' => $rating?->rating,
                 'review' => $rating?->review,
+                'image_path' => $item->product->main_image_path,
             ];
         });
     });
+
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
@@ -65,11 +70,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
 
 
-
-
+    Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
+    Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::get('/orders/{id}/products', [OrderController::class, 'getProducts']);
 });
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('buyer.product.details');
 Route::get('/search', [ProductController::class, 'search'])->name('search');
+Route::get('/category/{category}', [ProductController::class, 'showCategory'])->name('category.show');
+
 
 require __DIR__ . '/auth.php';
