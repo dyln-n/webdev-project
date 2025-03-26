@@ -14,32 +14,49 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         return view('product.details', compact('product'));
     }
-
     public function search(Request $request)
-{
-    // Get products that match the query
-    $products = Product::query();
+    {
 
-    if ($request->has('query')) {
-        $products = $products->where('name', 'like', '%' . $request->input('query') . '%');
+        $products = Product::query();
+        if ($request->has('query')) {
+            $products = $products->where('name', 'like', '%' . $request->input('query') . '%');
+        }
+
+        // Get the sort parameter
+        $sortOrder = $request->get('sort', 'newest'); // Default sorting by newest
+
+        if ($sortOrder === 'newest') {
+            // Sort by the creation date 
+            $products = $products->orderBy('created_at', 'desc');
+        } elseif ($sortOrder === 'asc' || $sortOrder === 'desc') {
+            // Sorting by price 
+            $products = $products->orderBy('price', $sortOrder);
+        }
+
+        $products = $products->paginate(6);
+
+        return view('search', compact('products'));
     }
 
-    // (6 items per page)
-    $products = $products->paginate(6);
-
-    return view('search', compact('products'));
-}
-
-public function showCategory($category)
-{
-    // Fetch products based on the category
-    $category = Category::where('name', ucfirst($category))->firstOrFail();
-
-    $products = Product::where('category_id', $category->id)
-        ->paginate(6);
-
-    return view('category.index', compact('products', 'category'));
-}
 
 
+    public function showCategory($categoryName, Request $request)
+    {
+        $category = Category::where('name', $categoryName)->firstOrFail();
+        $sortOrder = $request->get('sort', 'newest');
+
+        // Order by creation date
+        if ($sortOrder === 'newest') {
+            $products = Product::where('category_id', $category->id)
+                ->orderBy('created_at', 'desc')
+                ->paginate(6);
+        } elseif ($sortOrder === 'asc' || $sortOrder === 'desc') {
+            // Sorting by price 
+            $products = Product::where('category_id', $category->id)
+                ->orderBy('price', $sortOrder)
+                ->paginate(6);
+        }
+
+        return view('category.show', compact('category', 'products'));
+    }
 }

@@ -11,6 +11,19 @@
                 {{ $category->description }}
             </p>
 
+            <!-- Sorting Dropdown -->
+            <div class="mb-6">
+                <form method="GET" class="flex justify-start items-center">
+                    <label for="sort" class="mr-4 text-gray-800 dark:text-gray-100">Sort by:</label>
+                    <select name="sort" id="sort" class="p-2 border rounded-md" onchange="this.form.submit()">
+                        <!-- Default empty option for 'no sorting' -->
+                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
+                        <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Low to High</option>
+                        <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>High to Low</option>
+                    </select>
+                </form>
+            </div>
+
             <!-- Product List Section -->
             <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12" id="product-list">
                 @foreach($products as $product)
@@ -44,8 +57,9 @@
 
             <!-- Pagination Links -->
             <div class="mt-6">
-                {{ $products->links() }}
+                {{ $products->appends(['sort' => request()->get('sort')])->links() }}
             </div>
+
         </div>
     </div>
 </x-app-layout>
