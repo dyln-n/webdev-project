@@ -32,7 +32,9 @@ class SellerController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
+            $filename = time() . '_' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('uploads/products'), $filename);
+            $path = 'uploads/products/' . $filename;
 
             ProductImage::create([
                 'product_id' => $product->id,
@@ -72,7 +74,9 @@ class SellerController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
+            $filename = time() . '_' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('uploads/products'), $filename);
+            $path = 'uploads/products/' . $filename;
 
             ProductImage::updateOrCreate(
                 ['product_id' => $product->id, 'is_main' => true],

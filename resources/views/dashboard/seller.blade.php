@@ -56,7 +56,7 @@
 
                             <td class="px-2 py-2 text-center align-middle">
                                 @if ($product->images->first())
-                                <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+                                <img src="{{ asset($product->images->first()->image_path) }}"
                                     alt="{{ $product->name }}"
                                     class="w-18 h-18 object-cover rounded-md transition-transform duration-200 hover:scale-105 relative z-10">
                                 @else

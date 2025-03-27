@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\SellerController;
@@ -32,32 +33,44 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/buyer/orders/{id}/rate', [BuyerController::class, 'rateOrder'])->name('buyer.orders.rate');
 
     Route::get('/orders/{id}/products', function ($id) {
-        $order = Order::with('orderItems.product')->findOrFail($id);
-        return $order->orderItems->map(fn($item) => [
-            'id' => $item->product->id,
-            'name' => $item->product->name,
-            'quantity' => $item->quantity,
-        ]);
+        $order = Order::with('orderItems.product.images')->findOrFail($id);
+
+        $products = $order->orderItems->map(function ($item) {
+            $image = $item->product->images->first();
+            return [
+                'id' => $item->product->id,
+                'name' => $item->product->name,
+                'image_path' => asset($image ? $image->image_path : 'images/placeholder.png'),
+                'quantity' => $item->quantity,
+            ];
+        });
+
+        return response()->json($products);
     });
+
 
 
     Route::get('/orders/{id}/ratings', function ($id) {
         $user = Auth::user();
-        $order = Order::with('orderItems.product')->where('id', $id)->where('user_id', $user->id)->firstOrFail();
+        $order = Order::with('orderItems.product.images')->where('id', $id)->where('user_id', $user->id)->firstOrFail();
 
-        return $order->orderItems->map(function ($item) use ($user) {
+        $results = $order->orderItems->map(function ($item) use ($user) {
             $rating = Rating::where('user_id', $user->id)
                 ->where('product_id', $item->product->id)
                 ->first();
 
+            $imagePath = $item->product->images->first()->image_path ?? 'images/placeholder.png';
+
             return [
-                'id' => $item->product->id,
+                'product_id' => $item->product->id,
                 'name' => $item->product->name,
                 'rating' => $rating?->rating,
                 'review' => $rating?->review,
-                'image_path' => $item->product->main_image_path,
+                'image_path' => asset($imagePath),
             ];
         });
+
+        return response()->json($results);
     });
 
 

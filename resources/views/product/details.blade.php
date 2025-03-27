@@ -6,7 +6,7 @@
                 <!-- Product Image -->
                 <div class="w-1/3 flex justify-start">
                     @if ($product->images->first())
-                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+                    <img src="{{ asset($product->images->first()->image_path) }}"
                         alt="{{ $product->name }}"
                         class="h-full w-full object-cover rounded-lg">
                     @else
@@ -34,47 +34,46 @@
 
                     {{-- <!-- Add to Cart Button (AJAX) -->
                     <div class="mt-6">
-                        <button 
-                            id="add-to-cart-btn" 
+                        <button
+                            id="add-to-cart-btn"
                             data-product-id="{{ $product->id }}"
-                            {{ $product->stock <= 0 ? 'disabled' : '' }}
-                        >
-                            {{ $product->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}
-                        </button>
-                    </div>
-
-                    <!-- Add to Cart Button -->
-                    <div class="mt-6">
-                        <form action="">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <button type="submit" class="add-to-cart bg-indigo-600 text-white p-3 rounded-md">Add to Cart</button>
-                        </form>
-                    </div> --}}
-
-                    <!-- Add to Cart Button -->
-                    <div class="mt-6">
-                        <button 
-                            id="add-to-cart-btn" 
-                            data-product-id="{{ $product->id }}"
-                            class="bg-indigo-600 text-white p-3 rounded-md"
-                            {{ $product->stock <= 0 ? 'disabled' : '' }}
-                        >
-                            {{ $product->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}
-                        </button>
-                    </div>
-
+                    {{ $product->stock <= 0 ? 'disabled' : '' }}
+                    >
+                    {{ $product->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}
+                    </button>
                 </div>
+
+                <!-- Add to Cart Button -->
+                <div class="mt-6">
+                    <form action="">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <button type="submit" class="add-to-cart bg-indigo-600 text-white p-3 rounded-md">Add to Cart</button>
+                    </form>
+                </div> --}}
+
+                <!-- Add to Cart Button -->
+                <div class="mt-6">
+                    <button
+                        id="add-to-cart-btn"
+                        data-product-id="{{ $product->id }}"
+                        class="bg-indigo-600 text-white p-3 rounded-md"
+                        {{ $product->stock <= 0 ? 'disabled' : '' }}>
+                        {{ $product->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
+    </div>
 
-     <!-- JavaScript for AJAX Add to Cart -->
-     <script>
+    <!-- JavaScript for AJAX Add to Cart -->
+    <script>
         document.getElementById('add-to-cart-btn').addEventListener('click', async function() {
             const productId = this.dataset.productId;
             const btn = this;
-            
+
             btn.disabled = true;
             btn.textContent = 'Adding...';
 
@@ -93,9 +92,9 @@
                 });
 
                 if (!response.ok) throw new Error('Server error');
-                
+
                 const data = await response.json();
-                
+
                 if (data.success) {
                     alert(data.message);
                     const counter = document.getElementById('cart-count');

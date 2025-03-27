@@ -32,7 +32,7 @@
                     <!-- Product Image -->
                     @if ($product->images->first())
                     <div class="w-full h-48 overflow-hidden flex justify-center items-center">
-                        <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="{{ $product->name }}" class="h-full object-cover rounded-lg">
+                        <img src="{{ asset($product->images->first()->image_path) }}" alt="{{ $product->name }}" class="h-full object-cover rounded-lg">
                     </div>
                     @else
                     <div class="w-full h-48 bg-gray-200 text-gray-500 text-xs flex items-center justify-center rounded-lg">
