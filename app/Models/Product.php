@@ -38,9 +38,10 @@ class Product extends Model
     public function getMainImagePathAttribute()
     {
         $image = $this->images()->where('is_main', 1)->first();
-        return $image
-            ? asset('storage/' . $image->image_path)
-            : asset('images/placeholder.png');
+return $image
+    ? asset($image->image_path)
+    : asset('images/placeholder.png');
+
     }
 
     public function ratings()
