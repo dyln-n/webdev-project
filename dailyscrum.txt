@@ -48,7 +48,9 @@ Haitao:
 2025-03-20
 ----------
 Dylan:
-
+1. finish up on login/register pages
+2. switch to laravel breeze, read documentation
+3. redirect user to specific dashboard depending on role (buyer, seller)
 Amir:
 
 Haitao:
@@ -61,7 +63,8 @@ Haitao:
 2025-03-21
 ----------
 Dylan:
-
+1. work on product search page front-end
+2. watch tailwind css tut.
 Amir:
 
 Haitao:
@@ -72,7 +75,9 @@ Haitao:
 
 2025-03-22
 ----------
-Dylan:
+Dylan: 
+1. work on product search page back-end (list all products)
+2. couple front-end changes
 
 Amir:
 1. Done since last scrum
@@ -95,6 +100,8 @@ Haitao:
 2025-03-23
 ----------
 Dylan:
+1. finish up on product search back-end, get it peer tested for any bugs
+2. start planning product details page
 
 Amir:
 
@@ -108,6 +115,8 @@ Haitao:
 2025-03-24
 ----------
 Dylan:
+1. work on product details front-end (display all information: stock, product seller, etc)
+2. test other teamates work, find any bugs
 
 Amir:
 1. Done since last scrum
@@ -126,6 +135,8 @@ Haitao:
 2025-03-25
 ----------
 Dylan:
+1. implement product_images table to product search page.
+2. finish front-end of product details and start on the back-end.
 
 Amir:
 1. Done since last scrum
@@ -148,6 +159,8 @@ Haitao:
 2025-03-26
 ----------
 Dylan:
+1. finish product details back-end.
+2. start working on product filtering (by price, newest, etc)
 
 Amir:
 1. Done since last scrum
