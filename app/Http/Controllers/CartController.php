@@ -13,39 +13,47 @@ class CartController extends Controller
 {
     // create index method
     public function index()
-    {
-        if (Auth::check()) {
-            // Get cart from db
-            $cart = Cart::where("user_id", Auth::id())->with("product")->get();
-             // Convert to similar structure as session cart for consistency
-            $formattedCart = [];
-            foreach ($cart as $item) {
-                $formattedCart[$item->product_id] = [
-                    'id' => $item->id,
-                    'name' => $item->product->name,
-                    'price' => $item->product->price,
-                    'quantity' => $item->quantity,
-                    'product' => $item->product // Keep the relationship for blade
-                ];
-            }
-            return view('cart.index', ['cart' => $formattedCart]);
+{
+    if (Auth::check()) {
+        // Get cart from db
+        $cartItems = Cart::where("user_id", Auth::id())->with("product.images")->get();
 
-        } else {
-            // Get cart from session
-            $cart = Session::get('cart', []);
-        // Add empty product objects for consistency
-        foreach ($cart as $id => $item) {
-            $product = new Product([
-                'id' => $id,
-                'name' => $item['name'],
-                'price' => $item['price']
-            ]);
-            $cart[$id]['product'] = $product;
-            }
+        $formattedCart = [];
+        foreach ($cartItems as $item) {
+            $product = $item->product;
+            $image = $product->images->first();
+            $imagePath = $image ? $image->image_path : 'images/placeholder.png';
 
-            return view('cart.index', compact('cart'));
+            $formattedCart[$product->id] = [
+                'id' => $item->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'quantity' => $item->quantity,
+                'image_path' => $imagePath, 
+                'product' => $product
+            ];
         }
+
+        return view('cart.index', ['cart' => $formattedCart]);
+    } else {
+        // Guest user (session-based cart)
+        $cart = Session::get('cart', []);
+
+        foreach ($cart as $id => &$item) {
+            $product = Product::with('images')->find($id);
+
+            $item['product'] = $product;
+
+            if ($product && $product->images->first()) {
+                $item['image_path'] = $product->images->first()->image_path;
+            } else {
+                $item['image_path'] = 'images/placeholder.png';
+            }
+        }
+
+        return view('cart.index', ['cart' => $cart]);
     }
+}
 
     // addToCart method
     public function addToCart(Request $request, $id)
