@@ -11,6 +11,7 @@ use App\Models\Rating;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 
+
 Route::get('/', function () {
     return view('home');
 })->name('home');
@@ -60,10 +61,12 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-    
+
     //TODO: check route
     Route::get('/products', [ProductController::class, 'details'])->name('products.details');
-    Route::get('/checkout', function () {return view('checkout');})->name('checkout');
+    Route::get('/checkout', function () {
+        return view('checkout');
+    })->name('checkout');
     Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::post('/cart/save', [CartController::class, 'saveToDatabase'])->name('cart.save');

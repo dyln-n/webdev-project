@@ -56,15 +56,19 @@ class SellerController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|max:2048',
         ]);
 
         $product->update([
             'name' => $request->name,
+            'description' => $request->description,
             'price' => $request->price,
-            'stock' => $request->stock
+            'stock' => $request->stock,
+            'category_id' => $request->category_id
         ]);
 
         if ($request->hasFile('image')) {
@@ -76,7 +80,6 @@ class SellerController extends Controller
             );
         }
 
-        // Explicitly return status code 200 to fix JS fetch issue
         return response()->json([
             'success' => true,
             'message' => 'Product updated successfully!',
