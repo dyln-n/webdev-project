@@ -5,8 +5,14 @@
             <h2 class="text-lg font-semibold mb-4">Success!</h2>
             <p id="add-to-cart-message">Item added to your cart</p>
             <div class="mt-4 flex justify-center gap-4">
-                <button id="continue-shopping" class="px-4 py-2 bg-gray-300 text-gray-800 rounded">Continue Shopping</button>
-                <button id="view-cart" class="px-4 py-2 bg-gray-800 text-white rounded">View Cart</button>
+                <button id="continue-shopping"
+                    class="w-48 h-11 bg-gray-300 text-gray-800 rounded whitespace-nowrap text-center block">
+                    Continue Shopping
+                </button>
+                <button id="view-cart"
+                    class="w-48 h-11 bg-gray-800 text-white rounded whitespace-nowrap text-center block">
+                    View Cart
+                </button>
             </div>
         </div>
     </div>
@@ -54,34 +60,34 @@
                     <p class="text-gray-600 dark:text-gray-300 mt-4">Stock: {{ $product->stock }}</p>
                     <p class="text-gray-600 dark:text-gray-300 mt-4">Seller: {{ $product->seller->name }}</p>
 
-                <!-- Add to Cart Button -->
-                <div class="mt-6">
-                    <button
-                        id="add-to-cart-btn"
-                        data-product-id="{{ $product->id }}"
-                        class="bg-indigo-600 text-white p-3 rounded-md"
-                        {{ $product->stock <= 0 ? 'disabled' : '' }}>
-                        {{ $product->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}
-                    </button>
-                </div>
+                    <!-- Add to Cart Button -->
+                    <div class="mt-6">
+                        <button
+                            id="add-to-cart-btn"
+                            data-product-id="{{ $product->id }}"
+                            class="bg-indigo-600 text-white p-3 rounded-md"
+                            {{ $product->stock <= 0 ? 'disabled' : '' }}>
+                            {{ $product->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}
+                        </button>
+                    </div>
 
+                </div>
             </div>
         </div>
     </div>
-    </div>
 
-     <!-- JavaScript for AJAX Add to Cart -->
-     <script>
+    <!-- JavaScript for AJAX Add to Cart -->
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const addToCartBtn = document.getElementById('add-to-cart-btn');
             const successModal = document.getElementById('add-to-cart-modal');
             const errorModal = document.getElementById('error-modal');
-            
+
             if (addToCartBtn) {
                 addToCartBtn.addEventListener('click', async function() {
                     const productId = this.dataset.productId;
                     const btn = this;
-                    
+
                     btn.disabled = true;
                     btn.innerHTML = `
                         <span class="flex items-center justify-center">
@@ -112,7 +118,7 @@
                         }
 
                         const data = await response.json();
-                        
+
                         if (!response.ok) {
                             throw new Error(data.message || 'Could not add to cart');
                         }
@@ -120,7 +126,7 @@
                         // Show success modal
                         document.getElementById('add-to-cart-message').textContent = data.message;
                         successModal.classList.remove('hidden');
-                        
+
                         // Update cart counter if exists
                         const counter = document.getElementById('cart-count');
                         if (counter) {
