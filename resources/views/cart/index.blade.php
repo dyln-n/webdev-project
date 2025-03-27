@@ -20,6 +20,26 @@
         </div>
     </div>
 
+    <!-- Auth Modal -->
+    <div id="auth-required-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-sm text-center max-w-lg w-full">
+            <h2 class="text-lg font-semibold mb-4">Account Required</h2>
+            <p class="mb-4">You need to register or login to proceed to checkout.</p>
+            <div class="mt-4 flex justify-center gap-3">
+                <button id="cancel-auth" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                    Continue Shopping
+                </button>
+                <a href="{{ route('register') }}" class="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition no-underline">
+                    Register
+                </a>
+                <a href="{{ route('login') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition no-underline">
+                    Login
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart display -->
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Your Cart</h2>
@@ -84,16 +104,18 @@
                     Continue Shopping
                 </a>
                 @if(!empty($cart))
-                <a href="{{ auth()->check() ? route('checkout') : route('register') }}" class="bg-emerald-800 text-white px-6 py-2 rounded hover:bg-emerald-900 no-underline">
-                    Proceed to Checkout
-                </a>
+                <a href="{{ auth()->check() ? route('checkout') : '#' }}" 
+                    id="proceed-to-checkout" 
+                    class="bg-emerald-800 text-white px-6 py-2 rounded hover:bg-emerald-900 no-underline">
+                     Proceed to Checkout
+                 </a>
                 @endif
             </div>
         </div>
     </div>
-
+    
     @vite(['resources/js/cart/cart.js'])
-
+    
     <script>
         window.cartRoutes = {
             update: "{{ route('cart.update') }}",

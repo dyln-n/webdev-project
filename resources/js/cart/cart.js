@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Item removal handler
-    // Modal elements
     const removeConfirmModal = document.getElementById('remove-confirm-modal');
     const successModal = document.getElementById('cart-success-modal');
     
@@ -124,5 +123,32 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', () => {
             successModal.classList.add('hidden');
         });
+    });
+
+    // handle Auth for guest (checkout button)
+    const proceedBtn = document.getElementById('proceed-to-checkout');
+    const authModal = document.getElementById('auth-required-modal');
+    
+    if (proceedBtn) {
+        proceedBtn.addEventListener('click', function(e) {
+            // If href is '#', user is not logged in
+            if (this.getAttribute('href') === '#') {
+                e.preventDefault();
+                document.getElementById('auth-required-modal').classList.remove('hidden');
+            }
+            // Logged in users will proceed normally
+        });
+    }
+    
+    // Modal close handlers
+    document.getElementById('cancel-auth')?.addEventListener('click', function() {
+        document.getElementById('auth-required-modal').classList.add('hidden');
+    });
+    
+    // Close when clicking outside
+    document.getElementById('auth-required-modal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.add('hidden');
+        }
     });
 });
