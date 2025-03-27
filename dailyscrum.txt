@@ -145,6 +145,20 @@ Haitao:
 
 
 
+2025-03-26
+----------
+Dylan:
+
+Amir:
+
+
+Haitao:
+1. uploaded project files to filezilla
+2. set up domain for testing
+3. fixed js features missing in domain
+4. created new pics folders and fixed pics missing in domain 
+5. tested filter feature
+
 
 
 
