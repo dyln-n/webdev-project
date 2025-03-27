@@ -23,7 +23,7 @@
 
     <div class="container mx-auto p-6">
         <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
-
+        
         @if(count($cart) === 0)
             <p class="text-gray-500">Your cart is empty.</p>
         @else
@@ -40,20 +40,24 @@
                 <tbody>
                     @php $total = 0; @endphp
                     @foreach($cart as $id => $item)
+                    
                     @php 
                         $subtotal = $item['price'] * $item['quantity']; 
                         $total += $subtotal; 
+                        $product = App\Models\Product::find($id);
                     @endphp
                          <tr id="cart-item-{{ $id }}">
                             <td class="p-2 border">
                                 <div class="flex items-center">
+
                                     <!-- Product Image -->
-                                    @if(isset($item['image_path']))
-                                    <div class="w-16 h-16 mr-3 flex-shrink-0">
-                                        <img src="{{ asset('storage/app/public/products/' . $item['image_path']) }}" 
-                                             alt="{{ $item['name'] }}"
-                                             class="w-full h-full object-cover rounded border border-gray-200">
-                                    </div>
+                                    @if($item['product']->images->isNotEmpty())
+                                        <div class="w-16 h-16 mr-3 flex-shrink-0">
+                                            <img src="{{ asset($product->images->first()->image_path) }}" 
+                                                alt="{{ $product->name }}" 
+                                                class="w-full h-full object-cover rounded border border-gray-200">
+                                        </div>
+                                        
                                     @else
                                     <div class="w-16 h-16 mr-3 flex-shrink-0 bg-gray-100 rounded border border-gray-200 flex items-center justify-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,8 +68,8 @@
                                     <span>{{ $item['name'] }}</span>
                                 </div>
                             </td>
-                            <td class="p-2 border">{{ $item['name'] }}</td>
-                            <td class="p-2 border">${{ number_format($item['price'], 2) }}</td>
+                            <td class="p-2 border">{{ $item['name'] ?? $item['product']->name }}</td>
+                            <td class="p-2 border">${{ number_format($item['price'] ?? $item['product']->price, 2) }}</td>
                             <td class="p-2 border">
                                 <input type="number" 
                                        class="cart-quantity w-16 border p-1 text-center" 

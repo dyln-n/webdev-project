@@ -16,31 +16,41 @@ class CartController extends Controller
     {
         if (Auth::check()) {
             // Get cart from db
-            $cart = Cart::where("user_id", Auth::id())->with("product")->get();
-             // Convert to similar structure as session cart for consistency
-            $formattedCart = [];
-            foreach ($cart as $item) {
-                $formattedCart[$item->product_id] = [
-                    'id' => $item->id,
-                    'name' => $item->product->name,
-                    'price' => $item->product->price,
-                    'quantity' => $item->quantity,
-                    'product' => $item->product // Keep the relationship for blade
-                ];
-            }
-            return view('cart.index', ['cart' => $formattedCart]);
+            $cart = Cart::where("user_id", Auth::id())
+                ->with(["product.images"]) // Eager load product and its images
+                ->get()
+                ->mapWithKeys(function ($item) {
+                    return [
+                        $item->product_id => [
+                            'id' => $item->id,
+                            'quantity' => $item->quantity,
+                            'price' => $item->product->price, 
+                            'name' => $item->product->name,
+                            'product' => $item->product // Includes images relationship
+                        ]
+                    ];
+                });
+           
+            return view('cart.index', ['cart' => $cart]);
 
         } else {
             // Get cart from session
             $cart = Session::get('cart', []);
-        // Add empty product objects for consistency
-        foreach ($cart as $id => $item) {
-            $product = new Product([
-                'id' => $id,
-                'name' => $item['name'],
-                'price' => $item['price']
-            ]);
-            $cart[$id]['product'] = $product;
+            if (!empty($cart)) {
+                $productIds = array_keys($cart);
+                $products = Product::with('images')
+                                 ->whereIn('id', $productIds)
+                                 ->get()
+                                 ->keyBy('id');
+            
+                foreach ($cart as $id => &$item) {
+                    $item['product'] = $products[$id] ?? new Product([
+                        'id' => $id,
+                        'name' => $item['name'] ?? 'Unknown Product',
+                        'price' => $item['price'] ?? 0,
+                        'images' => collect() // Empty collection for images
+                    ]);
+                }
             }
 
             return view('cart.index', compact('cart'));
