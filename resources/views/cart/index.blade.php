@@ -1,4 +1,80 @@
 <x-app-layout>
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
+            <h2 class="text-xl font-semibold mb-6 text-center">Checkout</h2>
+            <form id="checkout-form">
+                <!-- Shipping Address -->
+                <h3 class="text-lg font-bold mb-2">Shipping Address</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <input type="text" name="full_name" placeholder="Full Name" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div>
+                        <input type="text" name="phone" placeholder="Phone Number" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div>
+                        <input type="text" name="street" placeholder="Street Address" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div>
+                        <input type="text" name="apt" placeholder="Apt, Suite, Unit, Building" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div>
+                        <input type="text" name="city" placeholder="City" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div>
+                        <input type="text" name="province" placeholder="Province / Territory" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <input type="text" name="postal_code" placeholder="Postal Code" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                </div>
+
+                <!-- Payment Info -->
+                <h3 class="text-lg font-bold mb-2">Payment Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <input type="text" name="card_number" placeholder="Card Number" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div>
+                        <input type="text" name="expiry" placeholder="MM/YY" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div>
+                        <input type="text" name="name_on_card" placeholder="Name on Card" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div>
+                        <input type="text" name="cvv" placeholder="CVV (Security Code)" class="border rounded px-3 py-2 w-full">
+                        <p class="form-error text-red-600 text-sm hidden"></p>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end gap-4">
+                    <button type="button" id="cancel-checkout" class="bg-gray-300 text-gray-800 px-4 py-2 rounded">Let me think</button>
+                    <button type="submit" id="submit-order" class="bg-emerald-800 text-white px-4 py-2 rounded">Place My Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="order-success-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-md text-center max-w-sm w-full">
+            <h2 class="text-lg font-semibold mb-4">Order Placed Successfully!</h2>
+            <p>Thank you for your purchase.</p>
+            <button id="go-home" class="mt-4 px-4 py-2 bg-emerald-700 text-white rounded">Go to Homepage</button>
+        </div>
+    </div>
+
     <!-- Remove Confirmation Modal -->
     <div id="remove-confirm-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded-lg shadow-md text-center max-w-sm w-full">
@@ -39,11 +115,50 @@
         </div>
     </div>
 
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-3xl">
+            <h2 class="text-xl font-bold mb-6 text-center">Checkout</h2>
+            <form id="checkout-form">
+                <!-- Shipping Info -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <input type="text" name="full_name" placeholder="Full Name" class="border rounded p-2" required>
+                    <input type="text" name="phone" placeholder="Phone Number" class="border rounded p-2" required>
+                    <input type="text" name="street" placeholder="Street Address" class="border rounded p-2" required>
+                    <input type="text" name="apt" placeholder="Apt, Suite, Unit, Building" class="border rounded p-2">
+                    <input type="text" name="city" placeholder="City" class="border rounded p-2" required>
+                    <input type="text" name="province" placeholder="Province / Territory" class="border rounded p-2" required>
+                    <input type="text" name="postal_code" placeholder="Postal Code" class="border rounded p-2 col-span-2" required>
+                </div>
+                <!-- Payment Info -->
+                <h3 class="font-semibold text-lg mb-2">Payment Information</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                    <input type="text" name="card_number" placeholder="Card Number" class="border rounded p-2 col-span-2" required>
+                    <input type="text" name="expiry" placeholder="MM/YY" class="border rounded p-2" required>
+                    <input type="text" name="cvv" placeholder="CVV (Security Code)" class="border rounded p-2" required>
+                    <input type="text" name="card_name" placeholder="Name on Card" class="border rounded p-2 col-span-3" required>
+                </div>
+                <div class="mt-6 flex justify-end gap-4">
+                    <button type="button" id="cancel-checkout" class="px-6 py-2 bg-gray-300 text-gray-800 rounded">Let me think</button>
+                    <button type="submit" class="px-6 py-2 bg-emerald-700 text-white rounded">Place My Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Success Modal -->
+    <div id="order-success-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-md text-center max-w-sm w-full">
+            <h2 class="text-lg font-semibold mb-4">Order Placed Successfully!</h2>
+            <p>Thank you for your purchase.</p>
+            <button id="close-success" class="mt-4 px-6 py-2 bg-gray-800 text-white rounded">Back to Home</button>
+        </div>
+    </div>
+
     <!-- Cart display -->
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Your Cart</h2>
-
             @if(count($cart) === 0)
             <p class="text-gray-500">Your cart is empty.</p>
             @else
@@ -69,13 +184,9 @@
                         <tr class="border-t" id="cart-item-{{ $id }}">
                             <td class="px-4 py-3 text-center">
                                 @if(isset($item['image_path']))
-                                <img src="{{ asset($item['image_path']) }}"
-                                    alt="{{ $item['name'] }}"
-                                    class="w-20 h-20 object-cover rounded-md">
+                                <img src="{{ asset($item['image_path']) }}" alt="{{ $item['name'] }}" class="w-20 h-20 object-cover rounded-md">
                                 @else
-                                <div class="w-20 h-20 bg-gray-200 text-gray-500 flex items-center justify-center rounded-md">
-                                    N/A
-                                </div>
+                                <div class="w-20 h-20 bg-gray-200 text-gray-500 flex items-center justify-center rounded-md">N/A</div>
                                 @endif
                             </td>
                             <td class="px-4 py-3 align-middle">{{ $item['name'] }}</td>
@@ -100,9 +211,7 @@
             @endif
 
             <div class="mt-6 flex justify-between">
-                <a href="{{ route('home') }}" class="bg-cyan-700 text-white px-6 py-2 rounded hover:bg-cyan-800 no-underline">
-                    Continue Shopping
-                </a>
+                <a href="{{ route('home') }}" class="bg-cyan-700 text-white px-6 py-2 rounded hover:bg-cyan-800 no-underline">Continue Shopping</a>
                 @if(!empty($cart))
                 <a href="{{ auth()->check() ? route('checkout') : '#' }}" 
                     id="proceed-to-checkout" 
