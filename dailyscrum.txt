@@ -150,7 +150,11 @@ Haitao:
 Dylan:
 
 Amir:
-
+1. Done since last scrum
+- added store cart in DB 
+- cart stored in session for guests
+2. Plan until next Scrum
+- implement checkout system 
 
 Haitao:
 1. uploaded project files to filezilla
