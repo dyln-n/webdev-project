@@ -178,8 +178,16 @@ Haitao:
 
 
 
+2025-03-27
+----------
+Dylan:
 
 
+Amir:
 
 
-
+Haitao:
+1. uploaded project files to filezilla
+2. tested web features in domain
+3. updated cart page frontend and logo
+4. created powerpoint pages for presentation
