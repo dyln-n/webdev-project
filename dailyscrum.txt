@@ -110,6 +110,11 @@ Haitao:
 Dylan:
 
 Amir:
+1. Done since last scrum
+- View cart items
+2. Plan until next Scrum
+- update cart dynamically
+- store cart in session for guests
 
 Haitao:
 1. Updated the seller frontend by replacing form with modal.
@@ -123,6 +128,13 @@ Haitao:
 Dylan:
 
 Amir:
+1. Done since last scrum
+- updated cart dynamically
+- cart stored in session for guests
+2. Plan until next Scrum
+- store cart in DB 
+3. Figure things out
+- checkout system using Stripe
 
 Haitao:
 1. Added new products to database and created product_images table.
@@ -132,6 +144,20 @@ Haitao:
 5. Added product image to the buyer’s order modal.
 
 
+
+2025-03-26
+----------
+Dylan:
+
+Amir:
+
+
+Haitao:
+1. uploaded project files to filezilla
+2. set up domain for testing
+3. fixed js features missing in domain
+4. created new pics folders and fixed pics missing in domain 
+5. tested filter feature
 
 
 
