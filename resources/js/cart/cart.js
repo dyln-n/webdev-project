@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // handle Auth for guest (checkout button)
     const proceedBtn = document.getElementById('proceed-to-checkout');
     const authModal = document.getElementById('auth-required-modal');
+    const checkoutModal = document.getElementById('checkout-modal');
     
     if (proceedBtn) {
         proceedBtn.addEventListener('click', function(e) {
