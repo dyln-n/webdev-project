@@ -59,7 +59,7 @@
 
             <!-- Pagination Links -->
             <div class="mt-6">
-                {{ $products->appends(['sort' => request()->get('sort')])->links() }}
+                {{ $products->appends(request()->all())->links() }}
             </div>
         </div>
     </div>
