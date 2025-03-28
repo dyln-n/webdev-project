@@ -78,7 +78,6 @@ Route::middleware(['auth'])->group(function () {
     //TODO: check route
     Route::get('/products', [ProductController::class, 'details'])->name('products.details');
 
-    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::post('/cart/save', [CartController::class, 'saveToDatabase'])->name('cart.save');
     Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
@@ -89,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/{id}/products', [OrderController::class, 'getProducts']);
 });
 
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
 
