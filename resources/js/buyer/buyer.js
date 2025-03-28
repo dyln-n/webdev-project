@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const canceledModal = document.getElementById('canceled-modal');
     const editModal = document.getElementById('edit-modal');
 
+    //review modal components
     const fields = document.getElementById('product-review-fields');
     const reviewForm = document.getElementById('review-form');
     const cancelBtn = document.getElementById('cancel-btn');
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.arrow').forEach(a => a.classList.remove('rotate'));
     }
 
+    //arrow buttons
     document.querySelectorAll('.toggle-review').forEach(button => {
         button.addEventListener('click', async () => {
             const orderId = button.dataset.orderId;
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             arrow.classList.add('rotate');
 
             if (status === 'delivered') {
+                //load and idsplay reviews or input fiels for new reviews
                 fields.innerHTML = '';
                 reviewForm.action = `/buyer/orders/${orderId}/rate`;
 
@@ -57,20 +60,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     unreviewed.forEach(item => {
                         const section = document.createElement('div');
-                        section.classList.add("flex", "items-start", "mb-4", "gap-4");
-                        section.innerHTML = `
-                            <img src="${item.image_path}" alt="${item.name}" class="w-20 h-20 object-cover rounded-md mt-1" />
-                            <div class="flex-1">
-                                <label class="font-semibold block mb-1">${item.name}</label>
-                                <div class="mb-2">
-                                    ${Array.from({ length: 5 }, (_, i) => `
-                                        <span class="star text-gray-300 cursor-pointer" data-index="${i + 1}" data-product-id="${item.product_id}">&#9733;</span>
-                                    `).join('')}
-                                </div>
-                                <textarea name="reviews[${item.product_id}]" rows="2" class="w-full border rounded p-2 text-sm" placeholder="Write a review (optional)"></textarea>
-                            </div>
-                        `;
-                        fields.appendChild(section);
+section.classList.add("flex", "items-start", "mb-4", "gap-4");
+section.innerHTML = `
+  <img src="${item.image_path}" alt="${item.name}" class="w-20 h-20 object-cover rounded-md mt-1" />
+  <div class="flex-1">
+    <label class="font-semibold block mb-1">${item.name}</label>
+    <div class="mb-2">
+      ${Array.from({ length: 5 }, (_, i) => `
+        <span class="star text-gray-300 cursor-pointer" data-index="${i + 1}" data-product-id="${item.product_id}">&#9733;</span>
+      `).join('')}
+    </div>
+    <input type="hidden" name="rating[${item.product_id}]" value="0" />
+    <textarea name="reviews[${item.product_id}]" rows="2" class="w-full border rounded p-2 text-sm" placeholder="Write a review (optional)"></textarea>
+  </div>
+`;
+fields.appendChild(section);
+
                     });
                 } else {
                     submitBtn.classList.add('hidden');
@@ -80,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal.classList.remove('hidden');
 
             } else if (status === 'pending') {
+                //edit a pending order
                 const res = await fetch(`/orders/${orderId}/products`);
                 const products = await res.json();
 
@@ -138,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        //close modals
         if (e.target.id === 'close-thank-you') {
             thankYouModal.classList.add('hidden');
         }
@@ -235,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    //cancel order
     document.getElementById('cancel-order-btn').addEventListener('click', async function () {
         const orderId = this.dataset.orderId;
 
@@ -255,4 +263,29 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Failed to cancel order.');
         }
     });
+
+    reviewForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(reviewForm);
+
+  fetch(reviewForm.action, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      modal.classList.add('hidden');
+      thankYouModal.classList.remove('hidden');
+    })
+    .catch(err => {
+      alert('Failed to submit review. Please try again.');
+      console.error(err);
+    });
+});
+
+
 });
