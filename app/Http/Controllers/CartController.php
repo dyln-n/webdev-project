@@ -176,34 +176,64 @@ class CartController extends Controller
         ])->first();
         
         if (!$cartItem) {
-            return response()->json(['error' => 'Cart item not found'], 404);
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart item not found'
+            ], 404);
         }
 
         $product = Product::find($cartItem->product_id);
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
-        }
-
-        if ($request->quantity > $product->stock) {
-            return response()->json(['error' => 'Insufficient stock available'], 400);
-        }
-
+        $requestedQuantity = (int)$request->quantity;
+        $currentQuantity = $cartItem->quantity;
+        $quantityChange = $requestedQuantity - $currentQuantity;
         
-        $cartItem->update(['quantity' => $request->quantity]);
-          
-        $subtotal = $product->price * $request->quantity;
-        $total = Cart::where('user_id', Auth::id())
-                ->with('product')
-                ->get()
-                ->sum(fn($item) => $item->product->price * $item->quantity);
+        // Check stock availability
+        if ($quantityChange > 0 && $product->stock < $quantityChange) {
+            $maxAvailable = $currentQuantity + $product->stock;
+            return response()->json([
+                'success' => false,
+                'message' => "Out of stock. Only {$maxAvailable} items available.",
+                'max_allowed' => $maxAvailable
+            ], 400);
+        }
 
-        return response()->json([
-            'success' => true,
-            'subtotal' => number_format($subtotal, 2),
-            'total' => number_format($total, 2),
-        ]);
+        DB::beginTransaction();
+        try {
+            // Update cart quantity
+            $cartItem->update(['quantity' => $requestedQuantity]);
+            
+            // Adjust product stock
+            if ($quantityChange != 0) {
+                $product->decrement('stock', $quantityChange);
+            }
+    
+            $subtotal = $product->price * $requestedQuantity;
+            $total = $this->calculateDatabaseCartTotal();
+    
+            DB::commit();
+    
+            return response()->json([
+                'success' => true,
+                'subtotal' => number_format($subtotal, 2),
+                'total' => number_format($total, 2),
+                'stock_left' => $product->fresh()->stock
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Update failed: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
+    private function calculateDatabaseCartTotal()
+    {
+    return Cart::where('user_id', Auth::id())
+        ->with('product')
+        ->get()
+        ->sum(fn($item) => $item->product->price * $item->quantity);
+    }
     // Migration Helper
     public function saveToDatabase()
     {
