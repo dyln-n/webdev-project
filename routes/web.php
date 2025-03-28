@@ -12,7 +12,6 @@ use App\Models\Order;
 use App\Models\Rating;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CheckoutController;
 
 Route::get('/', function () {
     return view('home');
