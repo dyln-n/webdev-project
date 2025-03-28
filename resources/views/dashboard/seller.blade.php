@@ -84,7 +84,7 @@
                 </table>
             </div>
 
-            <!-- Modal -->
+            <!-- Add/Update Modal -->
             <div id="product-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-40 flex items-center justify-center z-50">
                 <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl relative">
                     <h2 id="modal-title" class="text-xl font-semibold mb-4">Manage Product</h2>
