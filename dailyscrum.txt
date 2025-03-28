@@ -179,12 +179,18 @@ Haitao:
 5. tested filter feature
 
 
-2025-03-26
+2025-03-27
 ----------
 Dylan:
 1. finish product filtering
 2. last minute bug fixes
 3. start working on presentation slides
+
+Amir
+1. Done since last scrum
+- added checkout button behaviors
+- fixed last minute bugs on checkout
+- woked on presentation slides
 
 
 
