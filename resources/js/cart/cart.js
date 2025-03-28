@@ -6,14 +6,16 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.cart-quantity').forEach(input => {
         input.addEventListener('change', function() {
             const id = this.dataset.id;
-            const quantity = Math.max(1, parseInt(this.value)); // Ensure quantity >= 1
+            const quantity = Math.max(1, parseInt(this.value));
             const row = this.closest('tr');
-
+            const oldValue = parseInt(this.dataset.oldValue) || quantity;
+    
             fetch(window.cartRoutes.update, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({
                     id: id,
@@ -22,13 +24,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
             })
             .then(response => {
-                if (!response.ok) throw new Error('Network error');
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        // Handle stock errors specifically
+                        if (err.message && err.message.includes('available')) {
+                            const maxAllowed = err.max_allowed || quantity;
+                            this.value = maxAllowed;
+                            this.dataset.oldValue = maxAllowed;
+                            throw new Error(err.message);
+                        }
+                        throw new Error(err.message || 'Network error');
+                    });
+                }
                 return response.json();
             })
             .then(data => {
                 if (data.success) {
+                    // Update displayed values
                     row.querySelector('.item-total').textContent = '$' + data.subtotal;
                     document.getElementById('cart-total').textContent = '$' + data.total;
+                    
+                    // Update stock display if you have it
+                    const stockElement = row.querySelector('.stock-available');
+                    if (stockElement && data.stock_left !== undefined) {
+                        stockElement.textContent = `${data.stock_left} available`;
+                    }
+                    
+                    // Store the successful value as oldValue
+                    this.dataset.oldValue = quantity;
                 } else {
                     throw new Error(data.message || 'Update failed');
                 }
@@ -36,8 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error:', error);
                 alert(error.message);
-                this.value = this.dataset.oldValue || 1;
-                location.reload();
+                this.value = oldValue;
             });
         });
     });
@@ -130,15 +152,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const authModal = document.getElementById('auth-required-modal');
     const checkoutModal = document.getElementById('checkout-modal');
     
+    // Replace the existing proceedBtn event listener with:
     if (proceedBtn) {
         proceedBtn.addEventListener('click', function(e) {
-            if (this.getAttribute('href') === '#') {
+            e.preventDefault();
+            
+            if (!isLoggedIn) {
                 // Guest flow
-                e.preventDefault();
                 document.getElementById('auth-required-modal').classList.remove('hidden');
             } else {
                 // Logged-in user flow
-                e.preventDefault();
                 document.getElementById('checkout-modal').classList.remove('hidden');
             }
         });
