@@ -134,7 +134,10 @@
                 <h3 class="font-semibold text-lg mb-2">Payment Information</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                     <input type="text" name="card_number" placeholder="Card Number" class="border rounded p-2 col-span-2" required>
-                    <input type="text" name="expiry" placeholder="MM/YY" class="border rounded p-2" required>
+                    <input type="text" name="expiry" placeholder="MM/YY" 
+                        class="border rounded px-3 py-2 w-full" required
+                        pattern="(0[1-9]|1[0-2])\/?([0-9]{2})">
+                    <p class="form-error text-red-600 text-sm hidden"></p>
                     <input type="text" name="cvv" placeholder="CVV (Security Code)" class="border rounded p-2" required>
                     <input type="text" name="card_name" placeholder="Name on Card" class="border rounded p-2 col-span-3" required>
                 </div>
