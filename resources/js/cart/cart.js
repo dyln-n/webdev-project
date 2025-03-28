@@ -132,12 +132,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (proceedBtn) {
         proceedBtn.addEventListener('click', function(e) {
-            // If href is '#', user is not logged in
             if (this.getAttribute('href') === '#') {
+                // Guest flow
                 e.preventDefault();
                 document.getElementById('auth-required-modal').classList.remove('hidden');
+            } else {
+                // Logged-in user flow
+                e.preventDefault();
+                document.getElementById('checkout-modal').classList.remove('hidden');
             }
-            // Logged in users will proceed normally
         });
     }
     
@@ -146,6 +149,53 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('auth-required-modal').classList.add('hidden');
     });
     
+    // handle the form submission from the checkout modal
+    const checkoutForm = document.getElementById('checkout-form');
+        if (checkoutForm) {
+            checkoutForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitBtn = document.getElementById('submit-order');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Processing...';
+
+                try {
+                    const formData = new FormData(checkoutForm);
+                    const response = await fetch(window.checkoutRoutes.store, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    
+                    if (!response.ok) throw new Error(data.message || 'Checkout failed');
+
+                    // Success - show confirmation
+                    document.getElementById('checkout-modal').classList.add('hidden');
+                    document.getElementById('order-success-modal').classList.remove('hidden');
+                } catch (error) {
+                    console.error('Checkout error:', error);
+                    alert('Checkout failed: ' + error.message);
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Place My Order';
+                }
+            });
+        }
+
+        // Handle success modal close
+        document.getElementById('go-home')?.addEventListener('click', () => {
+            window.location.href = "{{ route('home') }}";
+        });
+
+        // Handle modal cancel button
+        document.getElementById('cancel-checkout')?.addEventListener('click', () => {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        });
+
     // Close when clicking outside
     document.getElementById('auth-required-modal')?.addEventListener('click', function(e) {
         if (e.target === this) {
