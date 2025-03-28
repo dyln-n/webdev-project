@@ -12,7 +12,7 @@ use App\Models\Order;
 use App\Models\Rating;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\CheckoutController;
 
 Route::get('/', function () {
     return view('home');
@@ -81,6 +81,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', function () {
         return view('checkout');
     })->name('checkout');
+
+    Route::post('/checkout', [CheckoutController::class, 'store'])->middleware('auth');
+
     Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::post('/cart/save', [CartController::class, 'saveToDatabase'])->name('cart.save');
@@ -90,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
     Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
     Route::get('/orders/{id}/products', [OrderController::class, 'getProducts']);
+    Route::post('/checkout', [OrderController::class, 'checkout'])->middleware('auth');
 });
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

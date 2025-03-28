@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -92,5 +93,58 @@ class OrderController extends Controller
         $order->save();
 
         return response()->json(['message' => 'Order canceled successfully.']);
+    }
+
+    public function checkout(Request $request)
+    {
+        $userId = Auth::id();
+        $cartItems = DB::table('cart')->where('user_id', $userId)->get();
+
+        if ($cartItems->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Your cart is empty.']);
+        }
+
+        $total = 0;
+        foreach ($cartItems as $item) {
+            $total += $item->quantity * DB::table('products')->where('id', $item->product_id)->value('price');
+        }
+
+        DB::beginTransaction();
+        try {
+            $orderId = DB::table('orders')->insertGetId([
+                'user_id'    => $userId,
+                'order_date' => now(),
+                'total'      => $total,
+                'status'     => 'pending',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            foreach ($cartItems as $item) {
+                $price = DB::table('products')->where('id', $item->product_id)->value('price');
+
+                DB::table('order_items')->insert([
+                    'order_id'   => $orderId,
+                    'product_id' => $item->product_id,
+                    'quantity'   => $item->quantity,
+                    'price'      => $price,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+
+            DB::table('cart')->where('user_id', $userId)->delete();
+
+            DB::commit();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to process order. Please try again.',
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

@@ -75,7 +75,9 @@ Haitao:
 
 2025-03-22
 ----------
-Dylan:
+Dylan: 
+1. work on product search page back-end (list all products)
+2. couple front-end changes
 
 1. work on product search page back-end (list all products)
 2. couple front-end changes
@@ -178,19 +180,7 @@ Haitao:
 
 
 
-2025-03-27
- ----------
- Dylan:
- 
- 
- Amir:
- 
- 
- Haitao:
- 1. uploaded project files to filezilla
- 2. tested web features in domain
- 3. updated cart page frontend and logo
- 4. created powerpoint pages for presentation
+
 
 
 
