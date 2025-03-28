@@ -173,10 +173,9 @@ Amir:
 
 Haitao:
 1. uploaded project files to filezilla
-2. set up domain for testing
-3. fixed js features missing in domain
-4. created new pics folders and fixed pics missing in domain 
-5. tested filter feature
+2. tested web features in domain
+3. updated cart page frontend and logo
+4. created powerpoint pages for presentation
 
 
 2025-03-27
@@ -192,7 +191,12 @@ Amir
 - fixed last minute bugs on checkout
 - woked on presentation slides
 
-
+Haitao:
+1. uploaded project files to filezilla
+2. set up domain for testing
+3. fixed js features missing in domain
+4. created new pics folders and fixed pics missing in domain 
+5. tested filter feature
 
 
 
