@@ -7,11 +7,11 @@ use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CheckoutController;
 use App\Models\Order;
 use App\Models\Rating;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CheckoutController;
 
 Route::get('/', function () {
     return view('home');
@@ -87,7 +87,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::post('/cart/save', [CartController::class, 'saveToDatabase'])->name('cart.save');
     Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
-
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
     Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
     Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');

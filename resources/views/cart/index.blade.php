@@ -71,10 +71,10 @@
         <div class="bg-white p-6 rounded-lg shadow-md text-center max-w-sm w-full">
             <h2 class="text-lg font-semibold mb-4">Order Placed Successfully!</h2>
             <p>Thank you for your purchase.</p>
-            <button id="go-home" class="mt-4 px-4 py-2 bg-emerald-700 text-white rounded">Go to Homepage</button>
+            <a href="{{ route('home') }}" class="mt-4 px-4 py-2 bg-emerald-700 text-white rounded">Go to Homepage</a>
         </div>
     </div>
-
+    
     <!-- Remove Confirmation Modal -->
     <div id="remove-confirm-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded-lg shadow-md text-center max-w-sm w-full">
@@ -223,12 +223,15 @@
         </div>
     </div>
     
-    @vite(['resources/js/cart/cart.js'])
-    
     <script>
         window.cartRoutes = {
             update: "{{ route('cart.update') }}",
             remove: "{{ route('cart.remove') }}"
         };
+        window.checkoutRoutes = {
+        store: "{{ route('checkout.store') }}"
+    };
     </script>
+
+    @vite(['resources/js/cart/cart.js'])
 </x-app-layout>
