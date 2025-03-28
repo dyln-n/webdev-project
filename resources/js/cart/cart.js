@@ -133,13 +133,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Replace the existing proceedBtn event listener with:
     if (proceedBtn) {
         proceedBtn.addEventListener('click', function(e) {
-            if (this.getAttribute('href') === '#') {
+            e.preventDefault();
+            
+            if (!isLoggedIn) {
                 // Guest flow
-                e.preventDefault();
                 document.getElementById('auth-required-modal').classList.remove('hidden');
             } else {
                 // Logged-in user flow
-                e.preventDefault();
                 document.getElementById('checkout-modal').classList.remove('hidden');
             }
         });
