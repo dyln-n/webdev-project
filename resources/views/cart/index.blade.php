@@ -213,11 +213,11 @@
             <div class="mt-6 flex justify-between">
                 <a href="{{ route('home') }}" class="bg-cyan-700 text-white px-6 py-2 rounded hover:bg-cyan-800 no-underline">Continue Shopping</a>
                 @if(!empty($cart))
-                <a href="{{ auth()->check() ? route('checkout') : '#' }}" 
+                <a href="#" 
                     id="proceed-to-checkout" 
                     class="bg-emerald-800 text-white px-6 py-2 rounded hover:bg-emerald-900 no-underline">
-                     Proceed to Checkout
-                 </a>
+                    Proceed to Checkout
+                </a>
                 @endif
             </div>
         </div>

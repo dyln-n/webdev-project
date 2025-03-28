@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const authModal = document.getElementById('auth-required-modal');
     const checkoutModal = document.getElementById('checkout-modal');
     
+    // Replace the existing proceedBtn event listener with:
     if (proceedBtn) {
         proceedBtn.addEventListener('click', function(e) {
             if (this.getAttribute('href') === '#') {

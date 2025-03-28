@@ -77,11 +77,6 @@ Route::middleware(['auth'])->group(function () {
 
     //TODO: check route
     Route::get('/products', [ProductController::class, 'details'])->name('products.details');
-    Route::get('/checkout', function () {
-        return view('checkout');
-    })->name('checkout');
-
-    Route::post('/checkout', [CheckoutController::class, 'store'])->middleware('auth');
 
     Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
@@ -92,7 +87,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
     Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
     Route::get('/orders/{id}/products', [OrderController::class, 'getProducts']);
-    Route::post('/checkout', [OrderController::class, 'checkout'])->middleware('auth');
 });
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
