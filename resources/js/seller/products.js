@@ -4,18 +4,49 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalTitle = document.getElementById("modal-title");
     const submitBtn = document.getElementById("modal-submit-btn");
     const closeBtns = document.querySelectorAll(".close-modal");
-    const radios = document.querySelectorAll("input[name='selected_product']");
-    const updateBtn = document.getElementById("update-btn");
     const addBtn = document.getElementById("add-btn");
-    const deleteBtn = document.getElementById("delete-btn");
-
     const deleteModal = document.getElementById("delete-modal");
-    const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
-    const cancelDeleteBtn = document.getElementById("cancel-delete-btn");
+const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+const cancelDeleteBtn = document.getElementById("cancel-delete-btn");
+const modalDeleteBtn = document.getElementById("modal-delete-btn");
 
-    let lastSelectedRadio = null;
+modalDeleteBtn.addEventListener("click", () => {
+    if (!form.product_id.value) return;
+    deleteModal.classList.remove("hidden");
+});
 
-    // Helpers
+confirmDeleteBtn.addEventListener("click", () => {
+    const id = form.product_id.value;
+    fetch(`/seller/products/${id}`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector("input[name='_token']").value,
+            "Accept": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (!result.success) {
+            alert("Delete failed.");
+            return;
+        }
+
+        document.querySelector(`tr[data-id="${id}"]`)?.remove();
+        deleteModal.classList.add("hidden");
+        modal.classList.add("hidden");
+        form.reset();
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Delete error.");
+    });
+});
+
+cancelDeleteBtn.addEventListener("click", () => {
+    deleteModal.classList.add("hidden");
+});
+
+    // Show modal with title
     function showModal(title) {
         modal.classList.remove("hidden");
         modalTitle.textContent = title;
@@ -32,9 +63,16 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".border-red-500").forEach(e => e.classList.remove("border-red-500"));
     }
 
+    function showError(field, message) {
+        field.classList.add("border-red-500");
+        const error = document.createElement("p");
+        error.className = "text-red-500 text-sm mt-1 error-message";
+        error.textContent = message;
+        field.parentNode.appendChild(error);
+    }
+
     function validateFormFields() {
         clearErrors();
-
         const name = form.name;
         const description = form.description;
         const price = form.price;
@@ -60,23 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return true;
     }
 
-    function showError(field, message) {
-        field.classList.add("border-red-500");
-
-        const error = document.createElement("p");
-        error.className = "text-red-500 text-sm mt-1 error-message";
-        error.textContent = message;
-
-        field.parentNode.appendChild(error);
-    }
-
-    // Gradual validation
     ["name", "description", "price", "stock"].forEach((fieldId) => {
         const input = document.getElementById(fieldId);
         input.addEventListener("input", () => {
             const value = input.value.trim();
             const existingError = input.parentNode.querySelector(".error-message");
-
             let isValid = true;
             let message = "";
 
@@ -114,72 +140,43 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Reset & button toggle
-    function clearSelection() {
-        form.reset();
-        document.getElementById("product_id").value = "";
-        lastSelectedRadio = null;
-        radios.forEach(r => r.checked = false);
-
-        updateBtn.disabled = true;
-        deleteBtn.disabled = true;
-        updateBtn.classList.add("opacity-50", "cursor-not-allowed");
-        deleteBtn.classList.add("opacity-50", "cursor-not-allowed");
-
-        addBtn.disabled = false;
-        addBtn.classList.remove("opacity-50", "cursor-not-allowed");
-    }
-
-    // Handle radio selection
-    radios.forEach(radio => {
-    radio.addEventListener("change", () => {
-        if (lastSelectedRadio === radio) {
-            radio.checked = false;
-            clearSelection();
-            return;
-        }
-
-        lastSelectedRadio = radio;
-        const row = radio.closest("tr");
-
-        form.product_id.value = radio.value;
-        form.name.value = row.querySelector(".product-name").dataset.fullName;
-        form.description.value = row.querySelector(".product-description").dataset.fullDescription;
-        form.price.value = row.querySelector(".product-price").textContent.trim();
-        form.stock.value = row.querySelector(".product-stock").textContent.trim();
-
-        updateBtn.disabled = false;
-        deleteBtn.disabled = false;
-        updateBtn.classList.remove("opacity-50", "cursor-not-allowed");
-        deleteBtn.classList.remove("opacity-50", "cursor-not-allowed");
-
-        addBtn.disabled = true;
-        addBtn.classList.add("opacity-50", "cursor-not-allowed");
-    });
-
-    radio.addEventListener("dblclick", () => {
-        radio.checked = false;
-        clearSelection();
-    });
-
-});
-
-    // Add button
     addBtn.addEventListener("click", () => {
-        clearSelection();
         form.reset();
         form.action = "/seller/products";
         const methodInput = form.querySelector("input[name='_method']");
         if (methodInput) methodInput.remove();
-
+        form.product_id.value = "";
         showModal("Add Product");
     });
 
-    // Update button
-    updateBtn.addEventListener("click", () => {
-        if (!form.product_id.value) return;
+document.querySelectorAll('.action-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const row = btn.closest('tr');
+        const id = row.dataset.id;
 
-        form.action = `/seller/products/${form.product_id.value}`;
+        // 填充表单字段
+        form.product_id.value = id;
+        form.name.value = row.querySelector(".product-name").dataset.fullName;
+        form.description.value = row.querySelector(".product-description").dataset.fullDescription;
+        form.price.value = row.querySelector(".product-price").textContent.trim();
+        form.stock.value = row.querySelector(".product-stock").textContent.trim();
+        form.category_id.value = row.dataset.categoryId;
+
+        // 设置图片预览
+        const imagePath = row.dataset.imagePath;
+        const previewWrapper = document.getElementById("image-preview-wrapper");
+        const previewImg = document.getElementById("product-preview-img");
+
+        if (imagePath) {
+            previewImg.src = '/' + imagePath;
+            previewWrapper.classList.remove('hidden');
+        } else {
+            previewImg.src = '';
+            previewWrapper.classList.add('hidden');
+        }
+
+        // 设置表单 action 和 method
+        form.action = `/seller/products/${id}`;
         if (!form.querySelector("input[name='_method']")) {
             const method = document.createElement("input");
             method.type = "hidden";
@@ -190,102 +187,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
         showModal("Update Product");
     });
-
-    // Submit
-form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    if (!validateFormFields()) return;
-
-    const isUpdate = form.querySelector("input[name='_method']");
-    const id = form.product_id.value;
-    const url = form.action;
-
-    const formData = new FormData(form);
-    const imageInput = form.querySelector('input[type="file"][name="image"]');
-
-    if (imageInput && imageInput.files.length > 0) {
-        const file = imageInput.files[0];
-        if (file.size > 2 * 1024 * 1024) {
-            alert("Image must be smaller than 2MB");
-            return;
-        }
-        formData.append('image', file);
-    }
-
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "X-CSRF-TOKEN": form.querySelector("input[name='_token']").value,
-            "Accept": "application/json"
-        },
-        body: formData
-    })
-    .then(res => res.json())
-    .then(result => {
-        if (!result.success) {
-            alert(result.message || "Error");
-            return;
-        }
-
-        if (isUpdate) {
-            const row = document.querySelector(`tr[data-id="${id}"]`);
-            if (row) {
-                row.querySelector(".product-name").textContent = form.name.value;
-                row.querySelector(".product-name").dataset.fullName = form.name.value;
-
-                const desc = form.description.value;
-                row.querySelector(".product-description").textContent = desc.length > 60 ? desc.slice(0, 60) + '…' : desc;
-                row.querySelector(".product-description").dataset.fullDescription = desc;
-                row.querySelector(".product-price").textContent = parseFloat(form.price.value).toFixed(2);
-                row.querySelector(".product-stock").textContent = form.stock.value;
-            }
-        } else {
-            window.location.reload();
-        }
-
-        closeModal();
-        clearSelection();
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Server error.");
-    });
 });
 
 
-    // Delete
-    deleteBtn.addEventListener("click", () => {
-        if (!form.product_id.value) return;
-        deleteModal.classList.remove("hidden");
-    });
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (!validateFormFields()) return;
 
-    confirmDeleteBtn.addEventListener("click", () => {
-        const id = form.product_id.value;
-        fetch(`/seller/products/${id}`, {
-            method: "DELETE",
-            headers: {
-                "X-CSRF-TOKEN": document.querySelector("input[name='_token']").value,
-                "Accept": "application/json"
+        const isUpdate = form.querySelector("input[name='_method']");
+        const id = form.product_id?.value;
+        const url = form.action;
+        const formData = new FormData(form);
+        const imageInput = form.querySelector('input[type="file"][name="image"]');
+
+        if (imageInput && imageInput.files.length > 0) {
+            const file = imageInput.files[0];
+            if (file.size > 2 * 1024 * 1024) {
+                alert("Image must be smaller than 2MB");
+                return;
             }
+            formData.append('image', file);
+        }
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": form.querySelector("input[name='_token']").value,
+                "Accept": "application/json"
+            },
+            body: formData
         })
         .then(res => res.json())
         .then(result => {
             if (!result.success) {
-                alert("Delete failed.");
+                alert(result.message || "Error");
                 return;
             }
-            document.querySelector(`tr[data-id="${id}"]`)?.remove();
-            clearSelection();
-            deleteModal.classList.add("hidden");
+            if (isUpdate) {
+                const row = document.querySelector(`tr[data-id="${id}"]`);
+                if (row) {
+                    row.querySelector(".product-name").textContent = form.name.value;
+                    row.querySelector(".product-name").dataset.fullName = form.name.value;
+                    const desc = form.description.value;
+                    row.querySelector(".product-description").textContent = desc.length > 60 ? desc.slice(0, 60) + '…' : desc;
+                    row.querySelector(".product-description").dataset.fullDescription = desc;
+                    row.querySelector(".product-price").textContent = parseFloat(form.price.value).toFixed(2);
+                    row.querySelector(".product-stock").textContent = form.stock.value;
+                }
+            } else {
+                window.location.reload();
+            }
+
+            closeModal();
         })
         .catch(err => {
             console.error(err);
-            alert("Delete error.");
+            alert("Server error.");
         });
-    });
-
-    cancelDeleteBtn.addEventListener("click", () => {
-        deleteModal.classList.add("hidden");
     });
 
     closeBtns.forEach(btn => {
