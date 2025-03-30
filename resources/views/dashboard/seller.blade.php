@@ -89,9 +89,9 @@
             <div id="product-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-40 flex items-center justify-center z-50">
                 <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl relative">
                     <h2 id="modal-title" class="text-xl font-semibold mb-4">Manage Product</h2>
-                    <form id="product-form" method="POST" action="{{ route('seller.products.store') }}">
+                    <form id="product-form" method="POST" action="{{ route('seller.products.store') }}" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" id="product_id" name="product_id" value="" enctype="multipart/form-data">
+                        <input type="hidden" id="product_id" name="product_id" value="">
 
                         <div class="mb-4">
                             <x-input-label for="name" :value="__('Product Name')" />
@@ -134,9 +134,10 @@
                             </div>
                         </div>
 
+                        <!-- Button section inside form -->
                         <div class="mt-6 flex justify-between items-center">
-                            <!-- 左侧两个按钮 -->
-                            <div class="flex gap-4">
+                            <!-- Update/Delete Buttons (Only for Update) -->
+                            <div id="update-buttons" class="flex gap-4 hidden">
                                 <button
                                     type="submit"
                                     id="modal-submit-btn"
@@ -151,10 +152,26 @@
                                 </button>
                             </div>
 
-                            <!-- 右侧关闭按钮 -->
+                            <!-- Submit/Cancel Buttons (Only for Add) -->
+                            <div id="add-buttons" class="flex gap-4 ml-auto hidden">
+                                <button
+                                    type="submit"
+                                    id="modal-submit-btn-add"
+                                    class="bg-gray-800 text-white px-4 py-2 rounded w-28 h-10 whitespace-nowrap text-center">
+                                    Submit
+                                </button>
+                                <button
+                                    type="button"
+                                    class="close-modal bg-gray-300 text-gray-800 px-4 py-2 rounded w-28 h-10 whitespace-nowrap text-center">
+                                    Cancel
+                                </button>
+                            </div>
+
+                            <!-- Common Close Button (for update) -->
                             <button
                                 type="button"
-                                class="close-modal bg-gray-300 text-gray-800 px-4 py-2 rounded w-28 h-10 whitespace-nowrap text-center">
+                                class="close-modal bg-gray-300 text-gray-800 px-4 py-2 rounded w-28 h-10 whitespace-nowrap text-center"
+                                id="modal-close-btn">
                                 Close
                             </button>
                         </div>

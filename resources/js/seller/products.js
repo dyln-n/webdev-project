@@ -50,6 +50,12 @@ cancelDeleteBtn.addEventListener("click", () => {
     function showModal(title) {
         modal.classList.remove("hidden");
         modalTitle.textContent = title;
+
+        const isUpdate = title.toLowerCase().includes("update");
+
+    document.getElementById("update-buttons").classList.toggle("hidden", !isUpdate);
+    document.getElementById("modal-close-btn").classList.toggle("hidden", !isUpdate);
+    document.getElementById("add-buttons").classList.toggle("hidden", isUpdate);
     }
 
     function closeModal() {
