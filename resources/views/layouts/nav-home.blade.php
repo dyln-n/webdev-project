@@ -1,5 +1,5 @@
-<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 h-16 font-sans">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex justify-between items-center">
         <!-- Left: Logo -->
         <div class="flex items-center gap-2">
             <x-application-logo class="h-8 w-8" />
@@ -8,9 +8,9 @@
 
         <!-- Center: Categories -->
         <div class="hidden sm:flex gap-10 font-medium">
-            <a href="{{ route('category.show', 'electronics') }}" class="text-gray-800 dark:text-gray-200 hover:text-indigo-600 no-underline">Electronics</a>
-            <a href="{{ route('category.show', 'fashion') }}" class="text-gray-800 dark:text-gray-200 hover:text-indigo-600 no-underline">Fashion</a>
-            <a href="{{ route('category.show', 'pet-supplies') }}" class="text-gray-800 dark:text-gray-200 hover:text-indigo-600 no-underline">Pet Supplies</a>
+            <a href="{{ route('category.show', 'electronics') }}" class="text-gray-800 dark:text-gray-200 hover:text-gray-900 no-underline">Electronics</a>
+            <a href="{{ route('category.show', 'fashion') }}" class="text-gray-800 dark:text-gray-200 hover:text-gray-900 no-underline">Fashion</a>
+            <a href="{{ route('category.show', 'pet-supplies') }}" class="text-gray-800 dark:text-gray-200 hover:text-gray-900 no-underline">Pet Supplies</a>
         </div>
 
         <!-- Right: Icons -->
