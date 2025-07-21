@@ -1,4 +1,6 @@
 <x-guest-layout>
+
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -17,16 +19,15 @@
         </div>
 
         <!-- Role -->
-<!-- Role -->
-<div class="mt-4">
-    <x-input-label for="role" :value="__('Role')" />
-    <select id="role" name="role"
-        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 w-full">
-        <option value="buyer" {{ old('role') == 'buyer' ? 'selected' : '' }}>Buyer</option>
-        <option value="seller" {{ old('role') == 'seller' ? 'selected' : '' }}>Seller</option>
-    </select>
-    <x-input-error :messages="$errors->get('role')" class="mt-2" />
-</div>
+        <div class="mt-4">
+            <x-input-label for="role" :value="__('Role')" />
+            <select id="role" name="role"
+                class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 w-full">
+                <option value="buyer" {{ old('role') == 'buyer' ? 'selected' : '' }}>Buyer</option>
+                <option value="seller" {{ old('role') == 'seller' ? 'selected' : '' }}>Seller</option>
+            </select>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+        </div>
 
 
         <!-- Password -->
@@ -62,4 +63,11 @@
             </x-primary-button>
         </div>
     </form>
+
+    <div class="text-sm text-gray-600 dark:text-gray-300 mb-2 pt-3 text-center ">
+        Click on <strong>“Already registered?”</strong>.
+        Test accounts (username and password) are provided for login.
+    </div>
+
+
 </x-guest-layout>
