@@ -31,10 +31,10 @@ class ProductController extends Controller
         $sortOrder = $request->get('sort', 'newest'); // Default sorting by newest
 
         if ($sortOrder === 'newest') {
-            // Sort by the creation date 
+            // Sort by the creation date
             $products = $products->orderBy('created_at', 'desc');
         } elseif ($sortOrder === 'asc' || $sortOrder === 'desc') {
-            // Sorting by price 
+            // Sorting by price
             $products = $products->orderBy('price', $sortOrder);
         }
 
@@ -47,6 +47,7 @@ class ProductController extends Controller
 
     public function showCategory($categoryName, Request $request)
     {
+        $categoryName = ucwords(str_replace('-', ' ', $categoryName));
         $category = Category::where('name', $categoryName)->firstOrFail();
         $sortOrder = $request->get('sort', 'newest');
 
@@ -56,7 +57,7 @@ class ProductController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(6);
         } elseif ($sortOrder === 'asc' || $sortOrder === 'desc') {
-            // Sorting by price 
+            // Sorting by price
             $products = Product::where('category_id', $category->id)
                 ->orderBy('price', $sortOrder)
                 ->paginate(6);

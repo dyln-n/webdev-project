@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="carousel-item h-full">
-                    <img src="/images/slide1.jpg" class="d-block w-100 h-full object-cover" alt="Slide 2">
+                    <img src="/images/slide2.jpg" class="d-block w-100 h-full object-cover" alt="Slide 2">
                     <div class="carousel-caption d-none d-md-block text-start" style="top: 50%; transform: translateY(-50%)">
                         <h1 class="text-white fw-bold display-4">Fashion Highlights</h1>
                         <p class="text-white fs-5">Step into the season with style – clothes, shoes, and more.</p>
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="carousel-item h-full">
-                    <img src="/images/slide1.jpg" class="d-block w-100 h-full object-cover" alt="Slide 3">
+                    <img src="/images/slide3.jpg" class="d-block w-100 h-full object-cover" alt="Slide 3">
                     <div class="carousel-caption d-none d-md-block text-start" style="top: 50%; transform: translateY(-50%)">
                         <h1 class="text-white fw-bold display-4">Pet Essentials</h1>
                         <p class="text-white fs-5">Everything your furry friends need, from food to toys.</p>
